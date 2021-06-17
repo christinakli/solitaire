@@ -11,8 +11,9 @@
   --> 
 
   
-  <Card v-for="card in shuffledCards.slice(0,7)" ref="c1" :col="'c1'" :number="card.number"
-  :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" :isFaceUp="false"/>
+  <Card v-for="card in shuffledCards.slice(0,7)" :ref="card.name" :col="'c1'" :number="card.number"
+  :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+  :isFaceUp="false" :name="card.name"/>
   
 
   <Deck :y="5" :x="85" topCard=""/>
@@ -57,10 +58,10 @@ export default {
         this.currClickedNumber = number;
         // console.log('isClicked: ' + isClicked);
     },
-    reset(col){
-      this.$refs[col].highlightStyle = this.normalStyle;
-      this.$refs[this.currClickedKey].highlightStyle = this.normalStyle;
-      this.$refs[col].disClicked = false;
+    reset(name){
+      this.$refs[name].currStyle = this.normalStyle;
+      this.$refs[this.currClickedKey].currStyle = this.normalStyle;
+      this.$refs[name].disClicked = false;
       this.$refs[this.currClickedKey].disClicked = false;
       this.isOneClicked = false;
       this.isTwoClicked = false;
@@ -70,17 +71,17 @@ export default {
       // First clicked should be the one moving, second clicked is destination
       this.disabledClicking = false;
     },
-    checkMove(col, suit, number){
+    checkMove(name, suit, number){
         console.log('disabledClicking in checkmove: ' + this.disabledClicking);
         console.log('First clicked suit & num: ' + this.currClickedSuit + this.currClickedNumber);
         console.log('Now clicked suit & num: ' + suit + number);
         const canDoMove = true;
         if (canDoMove){
           setTimeout(() => { 
-                      this.moveCards(this.currClickedKey, col);
+                      this.moveCards(this.currClickedKey, name);
                       this.moreThanTwoClicked = true;
                       // reset style
-                      this.reset(col);
+                      this.reset(name);
                     }, 2000);
           // this.moveCards();
         }
@@ -90,25 +91,27 @@ export default {
         }
         // this.disabledClicking = false;
     },
-    clickStatus(col, suit, number, isFaceUp, isClicked){
+    clickStatus(col, suit, number, name, isFaceUp, isClicked){
       console.log(this.$refs[col]);
       if (!this.disabledClicking){
-        this.$refs[col].highlightStyle = { backgroundColor: "#fffdb3" };
+        console.log('One clicked: ' + name);
+        // console.log('ref stuff: ' + JSON.stringify(this.$refs[name].highlightStyle));
+        this.$refs[name].currStyle = this.$refs[name].highlightStyle;
       }
     
       console.log('isClicked in app: ' + isClicked);
-      console.log('card clicked: col ' + col + ', suit: ' + suit + ', number: ' + number);
+      console.log('card clicked: name ' + name + ', suit: ' + suit + ', number: ' + number);
       this.moreThanTwoClicked = false; // HELPPPP I DON'T KNOW
       
       if (this.isOneClicked && !isClicked){
         console.log('One was clicked, now two are clicked');
         this.isTwoClicked = true;
         this.disabledClicking = true;
-        this.checkMove(col, suit, number);
+        this.checkMove(name, suit, number);
       }
       else if (this.isOneClicked && isClicked){
         console.log('One was clicked, now unclicking it');
-        this.$refs[col].highlightStyle = this.normalStyle;
+        this.$refs[name].currStyle = this.normalStyle;
         this.isOneClicked = false;
       }
       else {
@@ -116,7 +119,7 @@ export default {
         console.log('None were clicked, now one is clicked');
         this.currClickedSuit = suit;
         this.currClickedNumber = number;
-        this.currClickedKey = col;
+        this.currClickedKey = name;
       }
       console.log('isOneClicked: ' + this.isOneClicked, 
       '\nisTwoClicked: ' + this.isTwoClicked, '\nmoreThanTwoClicked: ' + this.moreThanTwoClicked);

@@ -1,6 +1,6 @@
 <template>
-    <img :src="require('@/assets/' + imgSrc + '')" @click="clickStatus(col, suit, number, isFaceUp, isClicked)"
-     :style = highlightStyle>
+    <img :src="require('@/assets/' + imgSrc + '')" @click="clickStatus(col, suit, number, name, isFaceUp, isClicked)"
+    :style="currStyle">
      <!-- :style="(!disabledClick && (oneClicked || twoClicked) && disClicked) ? highlightStyle : null">
      -->
     <!-- <p>
@@ -19,7 +19,8 @@ export default {
     suit: String,
     isClicked: Boolean,
     isFaceUp: Boolean,
-    imgSrc: String
+    imgSrc: String,
+    name: String
   },
   data(){
       // Maybe put all the prop values in here so they can be mutable?
@@ -28,10 +29,15 @@ export default {
       // all of its props one by one every time
       return{
           changeStyle: false,
-          highlightStyle:{
-              // backgroundColor: "#fffdb3",
-              width:10 + '%',
+          currStyle:{
+              //boxShadow: 0+'px' + 0+'px' + 5+'px' + 'green',
+              width:10+ '%',
               float:"left"   
+          },
+          highlightStyle:{
+            boxShadow: 0+'px' + ' ' + 0+'px' + ' ' + ' ' + 5+'px' + ' ' + 'green',
+            width:10+ '%',
+            float:"left"
           },
           // dcol: 0,
           disClicked: false,
@@ -62,7 +68,7 @@ export default {
           // this.disClicked = !this.disClicked;
           console.log('isClicked in card: ' + this.disClicked);
       },
-      clickStatus(col, suit, number, isFaceUp, isClicked){
+      clickStatus(col, suit, number, name, isFaceUp, isClicked){
           // const key = id;
           // console.log(id);
           // this.$parent.$refs[col].style.backgroundColor = 'red';
@@ -72,7 +78,7 @@ export default {
           this.$parent.updateInfo(suit, number, this.disFaceUp, this.disClicked);
           this.changeStyle = !this.changeStyle;
           // this.$props.isClicked = !this.$props.isClicked;
-          this.$parent.clickStatus(col, suit, number, isFaceUp, this.disClicked);
+          this.$parent.clickStatus(col, suit, number, name, isFaceUp, this.disClicked);
           // console.log('isTwoClicked in Card: ' + this.$parent.isTwoClicked);
           // console.log('twoClicked: ' + this.twoClicked);
           // console.log('isOneClicked in Card: ' + this.$parent.isOneClicked);
@@ -86,10 +92,11 @@ export default {
 <style scoped>
 img{
     width:10%;
-    float:left;   
+    float:left;  
+    margin-left: 2%;
 }
 img:hover{
-    background-color:yellow;
+    box-shadow: 0px 0px 10px yellow;
 }
 p{
     float:left;
