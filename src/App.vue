@@ -10,10 +10,50 @@
   <Card ref="c7" :col="'c7'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
   --> 
 
-  
-  <Card v-for="card in shuffledCards.slice(0,7)" :ref="card.name" :col="'c1'" :number="card.number"
-  :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
-  :isFaceUp="false" :name="card.name"/>
+  <div class="cols">
+    <div class="col">
+      <Card v-for="card in shuffledCards.slice(0,1)" :ref="card.name" :col="'c1'" :number="card.number"
+      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+      :isFaceUp="false" :name="card.name"/>
+    </div>
+
+    <div class="col">
+      <Card v-for="card in shuffledCards.slice(1,3)" :ref="card.name" :col="'c2'" :number="card.number"
+      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+      :isFaceUp="false" :name="card.name"/>
+    </div>
+
+    <div class="col">
+      <Card v-for="card in shuffledCards.slice(3,6)" :ref="card.name" :col="'c2'" :number="card.number"
+      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+      :isFaceUp="false" :name="card.name"/>
+    </div>
+
+    <div class="col">
+      <Card v-for="card in shuffledCards.slice(6,10)" :ref="card.name" :col="'c2'" :number="card.number"
+      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+      :isFaceUp="false" :name="card.name"/>
+    </div>
+
+    <div class="col">
+      <Card v-for="card in shuffledCards.slice(10,15)" :ref="card.name" :col="'c2'" :number="card.number"
+      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+      :isFaceUp="false" :name="card.name"/>
+    </div>
+
+    <div class="col">
+      <Card v-for="card in shuffledCards.slice(15,21)" :ref="card.name" :col="'c2'" :number="card.number"
+      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+      :isFaceUp="false" :name="card.name"/>
+    </div>
+
+    <div class="col">
+      <Card v-for="card in shuffledCards.slice(21,28)" :ref="card.name" :col="'c2'" :number="card.number"
+      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+      :isFaceUp="false" :name="card.name"/>
+    </div>
+  </div>
+
   
 
   <Deck :y="5" :x="85" topCard=""/>
@@ -44,7 +84,7 @@ export default {
       normalStyle: {
         backgroundColor: 'transparent',
         width: 10 + '%',
-        float: 'left'
+        //float: 'left'
       }
     }
   },
@@ -153,5 +193,20 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.cols{
+  /*
+  float: left;
+  width: 100%;
+  */
+  display: flex;
+  flex-direction: row;
+}
+.col{
+  width: 100%;
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 </style>

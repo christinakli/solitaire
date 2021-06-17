@@ -31,13 +31,15 @@ export default {
           changeStyle: false,
           currStyle:{
               //boxShadow: 0+'px' + 0+'px' + 5+'px' + 'green',
-              width:10+ '%',
-              float:"left"   
+               width:65+ '%',
+               marginBottom: 0+ '%',
+               marginLeft: 'none'
+              //float:"left"   
           },
           highlightStyle:{
             boxShadow: 0+'px' + ' ' + 0+'px' + ' ' + ' ' + 5+'px' + ' ' + 'green',
             width:10+ '%',
-            float:"left"
+            //float:"left"
           },
           // dcol: 0,
           disClicked: false,
@@ -92,7 +94,7 @@ export default {
 <style scoped>
 img{
     width:10%;
-    float:left;  
+    /*float:left;  */ 
     margin-left: 2%;
 }
 img:hover{
