@@ -1,7 +1,8 @@
 <template>
     <img src="../assets/card.png" @click="clickStatus(col, suit, number, isFaceUp, isClicked)"
-     :style="(!moreThanTwoClicked && (twoClicked || oneClicked)
-     && disClicked) ? highlightStyle : null">
+     :style = highlightStyle>
+     <!-- :style="(!disabledClick && (oneClicked || twoClicked) && disClicked) ? highlightStyle : null">
+     -->
     <!-- <p>
         {{ score }}
     </p> -->
@@ -12,7 +13,8 @@
 export default {
   name: 'Card',
   props: {
-    col: Number,
+    // id: String,
+    col: String,
     number: Number,
     suit: String,
     isClicked: Boolean,
@@ -26,11 +28,11 @@ export default {
       return{
           changeStyle: false,
           highlightStyle:{
-              backgroundColor: "#fffdb3",
+              // backgroundColor: "#fffdb3",
               width:10 + '%',
               float:"left"   
           },
-          dcol: 0,
+          // dcol: 0,
           disClicked: false,
           disFaceUp: false
       }
@@ -48,15 +50,21 @@ export default {
           }
           return this.$parent.moreThanTwoClicked;
       },
+      disabledClick(){
+          return this.$parent.disabledClicking;
+      }
   },
   methods: {
-      setValues(col, isFaceUp, isClicked){
-          this.dcol = col;
+      setValues(key, isFaceUp, isClicked){
+          // this.dcol = col;
           this.disFaceUp = isFaceUp;
           this.disClicked = !this.disClicked;
           console.log('isClicked in card: ' + this.disClicked);
       },
       clickStatus(col, suit, number, isFaceUp, isClicked){
+          // const key = id;
+          // console.log(id);
+          // this.$parent.$refs[col].style.backgroundColor = 'red';
           this.setValues(col, isFaceUp, isClicked);
           // this.disClicked = !this.disClicked;
           // console.log('\n');
