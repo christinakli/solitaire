@@ -1,6 +1,6 @@
 <template>
     <img src="../assets/card.png" @click="checkMove(col, suit, color)"
-     :style="(changeStyle && oneClicked) ? highlightStyle : null">
+     :style="(changeStyle && (twoClicked || oneClicked) && isClicked) ? highlightStyle : null">
     <!-- <p>
         {{ score }}
     </p> -->
@@ -13,7 +13,9 @@ export default {
   props: {
     col: Number,
     suit: Number,
-    color: String
+    color: String,
+    isClicked: Boolean,
+    isFaceUp: Boolean
   },
   data(){
       return{
@@ -36,6 +38,7 @@ export default {
   methods: {
       checkMove(col, suit, color){
           this.changeStyle = !this.changeStyle;
+          // this.$props.isClicked = !this.$props.isClicked;
           this.$parent.checkMove(col, suit, color);
           console.log('isTwoClicked in Card: ' + this.$parent.isTwoClicked);
           console.log('twoClicked: ' + this.twoClicked);
