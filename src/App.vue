@@ -14,43 +14,67 @@
     <div class="col">
       <Card v-for="card in shuffledCards.slice(0,1)" :ref="card.name" :col="'c1'" :number="card.number"
       :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
-      :isFaceUp="false" :name="card.name"/>
+      :isFaceUp="true" :name="card.name"/>
     </div>
 
     <div class="col">
-      <Card v-for="card in shuffledCards.slice(1,3)" :ref="card.name" :col="'c2'" :number="card.number"
+      <Card v-for="card in shuffledCards.slice(1,2)" :ref="card.name" :col="'c2'" :number="card.number"
       :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
       :isFaceUp="false" :name="card.name"/>
+
+      <Card v-for="card in shuffledCards.slice(2,3)" :ref="card.name" :col="'c2'" :number="card.number"
+      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+      :isFaceUp="true" :name="card.name"/>
     </div>
 
     <div class="col">
-      <Card v-for="card in shuffledCards.slice(3,6)" :ref="card.name" :col="'c2'" :number="card.number"
+      <Card v-for="card in shuffledCards.slice(3,5)" :ref="card.name" :col="'c2'" :number="card.number"
       :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
       :isFaceUp="false" :name="card.name"/>
+
+      <Card v-for="card in shuffledCards.slice(5,6)" :ref="card.name" :col="'c2'" :number="card.number"
+      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+      :isFaceUp="true" :name="card.name"/>
     </div>
 
     <div class="col">
-      <Card v-for="card in shuffledCards.slice(6,10)" :ref="card.name" :col="'c2'" :number="card.number"
+      <Card v-for="card in shuffledCards.slice(6,9)" :ref="card.name" :col="'c2'" :number="card.number"
       :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
       :isFaceUp="false" :name="card.name"/>
+
+      <Card v-for="card in shuffledCards.slice(9,10)" :ref="card.name" :col="'c2'" :number="card.number"
+      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+      :isFaceUp="true" :name="card.name"/>
     </div>
 
     <div class="col">
-      <Card v-for="card in shuffledCards.slice(10,15)" :ref="card.name" :col="'c2'" :number="card.number"
+      <Card v-for="card in shuffledCards.slice(10,14)" :ref="card.name" :col="'c2'" :number="card.number"
       :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
       :isFaceUp="false" :name="card.name"/>
+
+      <Card v-for="card in shuffledCards.slice(14,15)" :ref="card.name" :col="'c2'" :number="card.number"
+      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+      :isFaceUp="true" :name="card.name"/>
     </div>
 
     <div class="col">
-      <Card v-for="card in shuffledCards.slice(15,21)" :ref="card.name" :col="'c2'" :number="card.number"
+      <Card v-for="card in shuffledCards.slice(15,20)" :ref="card.name" :col="'c2'" :number="card.number"
       :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
       :isFaceUp="false" :name="card.name"/>
+
+      <Card v-for="card in shuffledCards.slice(20,21)" :ref="card.name" :col="'c2'" :number="card.number"
+      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+      :isFaceUp="true" :name="card.name"/>
     </div>
 
     <div class="col">
-      <Card v-for="card in shuffledCards.slice(21,28)" :ref="card.name" :col="'c2'" :number="card.number"
+      <Card v-for="card in shuffledCards.slice(21,27)" :ref="card.name" :col="'c2'" :number="card.number"
       :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
       :isFaceUp="false" :name="card.name"/>
+
+      <Card v-for="card in shuffledCards.slice(27,28)" :ref="card.name" :col="'c2'" :number="card.number"
+      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
+      :isFaceUp="true" :name="card.name"/>
     </div>
   </div>
 
@@ -83,7 +107,7 @@ export default {
       cards: cardData,
       normalStyle: {
         backgroundColor: 'transparent',
-        width: 10 + '%',
+        // width: 80 + '%',
         //float: 'left'
       }
     }
@@ -192,19 +216,20 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 30px;
 }
 .cols{
   /*
   float: left;
   width: 100%;
   */
+  width:80%;
   display: flex;
   flex-direction: row;
 }
 .col{
   width: 100%;
-  margin: 5px;
+  margin: 0px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;

@@ -1,6 +1,6 @@
 <template>
-    <img :src="require('@/assets/' + imgSrc + '')" @click="clickStatus(col, suit, number, name, isFaceUp, isClicked)"
-    :style="currStyle">
+    <img :src="isFaceUp ? require('@/assets/' + imgSrc + '') : require('../assets/card.png')" @click="clickStatus(col, suit, number, name, isFaceUp, isClicked)"
+    :style="isFaceUp ? currStyle : faceDownStyle" >
      <!-- :style="(!disabledClick && (oneClicked || twoClicked) && disClicked) ? highlightStyle : null">
      -->
     <!-- <p>
@@ -36,9 +36,13 @@ export default {
                marginLeft: 'none'
               //float:"left"   
           },
+          faceDownStyle:{
+              width: 90 + '%',
+              marginLeft: 'none'
+          },
           highlightStyle:{
             boxShadow: 0+'px' + ' ' + 0+'px' + ' ' + ' ' + 5+'px' + ' ' + 'green',
-            width:10+ '%',
+            width:65+ '%',
             //float:"left"
           },
           // dcol: 0,
