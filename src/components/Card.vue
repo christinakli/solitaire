@@ -58,7 +58,7 @@ export default {
       setValues(key, isFaceUp, isClicked){
           // this.dcol = col;
           this.disFaceUp = isFaceUp;
-          this.disClicked = !this.disClicked;
+          // this.disClicked = !this.disClicked;
           console.log('isClicked in card: ' + this.disClicked);
       },
       clickStatus(col, suit, number, isFaceUp, isClicked){
@@ -75,6 +75,7 @@ export default {
           // console.log('isTwoClicked in Card: ' + this.$parent.isTwoClicked);
           // console.log('twoClicked: ' + this.twoClicked);
           // console.log('isOneClicked in Card: ' + this.$parent.isOneClicked);
+          this.disClicked = !this.disClicked;
       }
   }
 }
