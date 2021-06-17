@@ -2,13 +2,17 @@
   <!--  <img alt="Vue logo" src="./assets/logo.png">
   <HelloWorld msg="Welcome to Your Vue.js App"/> -->
   <h1> solitaire </h1>
-  <Card :col="1" :suit="0" color="" :isClicked="false" :isFaceUp="false"/>
-  <Card :col="2" :suit="0" color="" :isClicked="false" :isFaceUp="false"/>
-  <Card :col="3" :suit="0" color="" :isClicked="false" :isFaceUp="false"/>
-  <Card :col="4" :suit="0" color="" :isClicked="false" :isFaceUp="false"/>
-  <Card :col="5" :suit="0" color="" :isClicked="false" :isFaceUp="false"/>
-  <Card :col="6" :suit="0" color="" :isClicked="false" :isFaceUp="false"/>
-  <Card :col="7" :suit="0" color="" :isClicked="false" :isFaceUp="false"/>
+  <Card :col="1" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
+  <Card :col="2" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
+  <Card :col="3" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
+  <Card :col="4" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
+  <Card :col="5" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
+  <Card :col="6" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
+  <Card :col="7" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
+
+  <!--
+  <Card v-for="card in cards" :col="1" :suit="card.suit" :key="card.name"/>
+  -->
 
   <Deck :y="5" :x="85"/>
   <Deck :y="28" :x="85"/>
@@ -27,8 +31,9 @@ export default {
     return {
       isOneClicked: false,
       isTwoClicked: false,
+      moreThanTwoClicked: false,
       currClickedSuit: '',
-      currClickedColor: '',
+      currClickedNumber: '',
       cards: cardData
     }
   },
@@ -37,8 +42,14 @@ export default {
     Deck
   },
   methods: {
-    checkMove(col, suit, color){
-      console.log('col clicked: ' + col + ', suit: ' + suit + ', color' + color);
+    updateInfo(suit, number, isFaceUp, isClicked){
+        this.currClickedSuit = suit;
+        this.currClickedNumber = number;
+        console.log('isClicked: ' + isClicked);
+    },
+    checkMove(col, suit, number, isFaceUp, isClicked){
+      console.log('card clicked: col ' + col + ', suit: ' + suit + ', number: ' + number);
+      
       if (this.isOneClicked){
         // One is clicked ==> the current click is for the second click
         this.isOneClicked = false;
@@ -55,23 +66,23 @@ export default {
         else {
           console.log('Two were clicked; no change');
           this.isTwoClicked = false;
+          this.moreThanTwoClicked = true;
         }
       }
-        
-      // this.isOneClicked = !this.isOneClicked;
-      // if (this.isOneClicked){
-      //   // isOne = true ==> only one is clicked
-      //   console.log('One is clicked');
-      //   this.isTwoClicked = false;
-      //   console.log('isTwoClicked: ' + this.isTwoClicked);
-      // }
-      // else {
-      //   // isOne = false ==> it used to be true ==> there had been one clciked
-      //   // ==> clicking this one makes it 2 clicked ==> isTwo = true
-      //   console.log('Two are clicked');
-      //   this.isTwoClicked = true;
-      //   console.log('isTwoClicked: ' + this.isTwoClicked);
-      // }
+    }
+  },
+  computed: {
+    shuffledCards(){
+        // Credit: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+				var array = this.cards;
+				var currentIndex = array.length, randomIndex;
+  				while (0 !== currentIndex) {
+    				randomIndex = Math.floor(Math.random() * currentIndex);
+    				currentIndex--;
+    				[array[currentIndex], array[randomIndex]] = [
+      				array[randomIndex], array[currentIndex]];
+          }
+        return array;
     }
   }
 }
