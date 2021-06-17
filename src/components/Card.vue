@@ -1,5 +1,5 @@
 <template>
-    <img src="../assets/card.png" @click="clickStatus(col, suit, number, isFaceUp, isClicked)"
+    <img :src="require('@/assets/' + imgSrc + '')" @click="clickStatus(col, suit, number, isFaceUp, isClicked)"
      :style = highlightStyle>
      <!-- :style="(!disabledClick && (oneClicked || twoClicked) && disClicked) ? highlightStyle : null">
      -->
@@ -18,7 +18,8 @@ export default {
     number: Number,
     suit: String,
     isClicked: Boolean,
-    isFaceUp: Boolean
+    isFaceUp: Boolean,
+    imgSrc: String
   },
   data(){
       // Maybe put all the prop values in here so they can be mutable?

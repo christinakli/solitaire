@@ -1,5 +1,6 @@
 <template>
   <h1> solitaire </h1>
+  <!-- 
   <Card ref="c1" :col="'c1'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
   <Card ref="c2" :col="'c2'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
   <Card ref="c3" :col="'c3'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
@@ -7,10 +8,12 @@
   <Card ref="c5" :col="'c5'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
   <Card ref="c6" :col="'c6'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
   <Card ref="c7" :col="'c7'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
+  --> 
 
-  <!--
-  <Card v-for="card in cards" :col="1" :suit="card.suit" :key="card.name"/>
-  -->
+  
+  <Card v-for="card in shuffledCards.slice(0,7)" ref="c1" :col="'c1'" :number="card.number"
+  :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" :isFaceUp="false"/>
+  
 
   <Deck :y="5" :x="85" topCard=""/>
   <Deck :y="28" :x="85" topCard=""/>
@@ -119,56 +122,12 @@ export default {
       '\nisTwoClicked: ' + this.isTwoClicked, '\nmoreThanTwoClicked: ' + this.moreThanTwoClicked);
       // console.log('\n');
       console.log('\n');
-      // if (!isClicked){ // Allows for un-highlighting
-      //   console.log('Time for unhighlighting');
-      //   if (this.isOneClicked){
-      //     this.isOneClicked = false;
-      //   }
-      //   else { // this.isOneClicked = false
-      //     this.isOneClicked = true;
-      //     this.isTwoClicked = false;
-      //   }
-      //   // else if (this.isTwoClicked){
-      //   //   this.isTwoClicked = false;
-      //   // }
-      //   console.log('isOneClicked: ' + this.isOneClicked, 
-      //   '\nisTwoClicked: ' + this.isTwoClicked, '\nmoreThanTwoClicked: ' + this.moreThanTwoClicked);
-      //   console.log('\n');
-      //   return;
-      // }
-      
-      // if (this.isOneClicked && isClicked){
-      //   // One is clicked ==> the current click is for the second click
-      //   this.isOneClicked = false;
-      //   this.isTwoClicked = true;
-      //   console.log('Two are now clicked');
-      //   this.checkMove(col, suit, number);
-      // }
-      // else {
-      //   // One is NOT clicked ==> either 2 are clicked, or none are clicked
-      //   if (!this.isTwoClicked){
-      //     // Two are NOT clicked ==> none are clicked
-      //     this.isOneClicked = true;
-      //     this.currClickedSuit = suit;
-      //     this.currClickedNumber = number;
-      //     console.log('None were clicked, now one is clicked');
-      //   }
-      //   else {
-      //     console.log('Two were clicked; unhighlight them');
-      //     this.isTwoClicked = false;
-      //     // this.isOneClicked = true; // idk???????
-      //     this.moreThanTwoClicked = true;
-      //   }
-      // }
-      // console.log('isOneClicked: ' + this.isOneClicked, 
-      // '\nisTwoClicked: ' + this.isTwoClicked, '\nmoreThanTwoClicked: ' + this.moreThanTwoClicked);
-      // console.log('\n');
     }
   },
   computed: {
     shuffledCards(){
         // Credit: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-				var array = this.cards;
+        var array = this.cards;
 				var currentIndex = array.length, randomIndex;
   				while (0 !== currentIndex) {
     				randomIndex = Math.floor(Math.random() * currentIndex);
@@ -176,6 +135,7 @@ export default {
     				[array[currentIndex], array[randomIndex]] = [
       				array[randomIndex], array[currentIndex]];
           }
+        console.log(array[0]);
         return array;
     }
   }
