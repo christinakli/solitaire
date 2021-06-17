@@ -1,4 +1,3 @@
-
 <template>
   <!--  <img alt="Vue logo" src="./assets/logo.png">
   <HelloWorld msg="Welcome to Your Vue.js App"/> -->
@@ -35,7 +34,8 @@ export default {
       moreThanTwoClicked: false,
       currClickedSuit: '',
       currClickedNumber: '',
-      cards: cardData
+      cards: cardData,
+      currClickedCards: []
     }
   },
   components: {
@@ -46,12 +46,33 @@ export default {
     updateInfo(suit, number, isFaceUp, isClicked){
         this.currClickedSuit = suit;
         this.currClickedNumber = number;
-        console.log('isClicked: ' + isClicked);
+        // console.log('isClicked: ' + isClicked);
     },
-    checkMove(col, suit, number, isFaceUp, isClicked){
+    clickStatus(col, suit, number, isFaceUp, isClicked){
+      console.log('isClicked in app: ' + isClicked);
       console.log('card clicked: col ' + col + ', suit: ' + suit + ', number: ' + number);
+      this.moreThanTwoClicked = false; // HELPPPP I DON'T KNOW
       
-      if (this.isOneClicked){
+      
+      if (!isClicked){ // Allows for un-highlighting
+        console.log('Time for unhighlighting');
+        if (this.isOneClicked){
+          this.isOneClicked = false;
+        }
+        else { // this.isOneClicked = false
+          this.isOneClicked = true;
+          this.isTwoClicked = false;
+        }
+        // else if (this.isTwoClicked){
+        //   this.isTwoClicked = false;
+        // }
+        console.log('isOneClicked: ' + this.isOneClicked, 
+        '\nisTwoClicked: ' + this.isTwoClicked, '\nmoreThanTwoClicked: ' + this.moreThanTwoClicked);
+        console.log('\n');
+        return;
+      }
+      
+      if (this.isOneClicked && isClicked){
         // One is clicked ==> the current click is for the second click
         this.isOneClicked = false;
         this.isTwoClicked = true;
@@ -65,14 +86,15 @@ export default {
           console.log('None were clicked, now one is clicked');
         }
         else {
-          console.log('Two were clicked; no change');
+          console.log('Two were clicked; unhighlight them');
           this.isTwoClicked = false;
-          this.isOneClicked = true; // idk???????
+          // this.isOneClicked = true; // idk???????
           this.moreThanTwoClicked = true;
         }
       }
       console.log('isOneClicked: ' + this.isOneClicked, 
       '\nisTwoClicked: ' + this.isTwoClicked, '\nmoreThanTwoClicked: ' + this.moreThanTwoClicked);
+      console.log('\n');
     }
   },
   computed: {

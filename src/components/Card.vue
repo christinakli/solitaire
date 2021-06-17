@@ -1,6 +1,7 @@
 <template>
-    <img src="../assets/card.png" @click="checkMove(col, suit, number, isFaceUp, isClicked)"
-     :style="(!moreThanTwoClicked && (twoClicked || oneClicked) && disClicked) ? highlightStyle : null">
+    <img src="../assets/card.png" @click="clickStatus(col, suit, number, isFaceUp, isClicked)"
+     :style="(!moreThanTwoClicked && (twoClicked || oneClicked)
+     && disClicked) ? highlightStyle : null">
     <!-- <p>
         {{ score }}
     </p> -->
@@ -42,23 +43,27 @@ export default {
           return this.$parent.isOneClicked;
       },
       moreThanTwoClicked(){
+          if (this.$parent.moreThanTwoClicked){
+              this.disClicked = false;
+          }
           return this.$parent.moreThanTwoClicked;
-      }
+      },
   },
   methods: {
       setValues(col, isFaceUp, isClicked){
           this.dcol = col;
           this.disFaceUp = isFaceUp;
           this.disClicked = !this.disClicked;
+          console.log('isClicked in card: ' + this.disClicked);
       },
-      checkMove(col, suit, number, isFaceUp, isClicked){
+      clickStatus(col, suit, number, isFaceUp, isClicked){
           this.setValues(col, isFaceUp, isClicked);
           // this.disClicked = !this.disClicked;
-          console.log('\n');
+          // console.log('\n');
           this.$parent.updateInfo(suit, number, this.disFaceUp, this.disClicked);
           this.changeStyle = !this.changeStyle;
           // this.$props.isClicked = !this.$props.isClicked;
-          this.$parent.checkMove(col, suit, number, isFaceUp, isClicked);
+          this.$parent.clickStatus(col, suit, number, isFaceUp, this.disClicked);
           // console.log('isTwoClicked in Card: ' + this.$parent.isTwoClicked);
           // console.log('twoClicked: ' + this.twoClicked);
           // console.log('isOneClicked in Card: ' + this.$parent.isOneClicked);
