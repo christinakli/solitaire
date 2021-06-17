@@ -1,3 +1,4 @@
+
 <template>
   <!--  <img alt="Vue logo" src="./assets/logo.png">
   <HelloWorld msg="Welcome to Your Vue.js App"/> -->
@@ -66,9 +67,12 @@ export default {
         else {
           console.log('Two were clicked; no change');
           this.isTwoClicked = false;
+          this.isOneClicked = true; // idk???????
           this.moreThanTwoClicked = true;
         }
       }
+      console.log('isOneClicked: ' + this.isOneClicked, 
+      '\nisTwoClicked: ' + this.isTwoClicked, '\nmoreThanTwoClicked: ' + this.moreThanTwoClicked);
     }
   },
   computed: {

@@ -59,9 +59,9 @@ export default {
           this.changeStyle = !this.changeStyle;
           // this.$props.isClicked = !this.$props.isClicked;
           this.$parent.checkMove(col, suit, number, isFaceUp, isClicked);
-          console.log('isTwoClicked in Card: ' + this.$parent.isTwoClicked);
+          // console.log('isTwoClicked in Card: ' + this.$parent.isTwoClicked);
           // console.log('twoClicked: ' + this.twoClicked);
-          console.log('isOneClicked in Card: ' + this.$parent.isOneClicked);
+          // console.log('isOneClicked in Card: ' + this.$parent.isOneClicked);
       }
   }
 }
