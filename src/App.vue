@@ -1,26 +1,23 @@
 <template>
   <h1> solitaire </h1>
-  <!-- 
-  <Card ref="c1" :col="'c1'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
-  <Card ref="c2" :col="'c2'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
-  <Card ref="c3" :col="'c3'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
-  <Card ref="c4" :col="'c4'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
-  <Card ref="c5" :col="'c5'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
-  <Card ref="c6" :col="'c6'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
-  <Card ref="c7" :col="'c7'" :number="0" suit="" :isClicked="false" :isFaceUp="false"/>
-  --> 
 
   <div class="cols">
     <div class="col">
-      <Card v-for="card in shuffledCards.slice(0,1)" :ref="card.name" :col="'c1'" :number="card.number"
-      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
-      :isFaceUp="true" :name="card.name"/>
+      <DragDrop v-for="card in shuffledCards.slice(0,1)" :key="card.name" 
+      :dragZIndex="50" >
+        <Card :ref="card.name" :col="'c1'" :number="card.number"
+        :suit="card.suit" :imgSrc="card.source" :isClicked="false" 
+        :isFaceUp="true" :name="card.name"/>
+      </DragDrop>
     </div>
 
     <div class="col">
-      <Card v-for="card in shuffledCards.slice(1,2)" :ref="card.name" :col="'c2'" :number="card.number"
-      :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
-      :isFaceUp="false" :name="card.name"/>
+      <DragDrop v-for="card in shuffledCards.slice(1,2)" :key="card.name">
+        <Card :ref="card.name" :col="'c2'" :number="card.number"
+        :suit="card.suit" :imgSrc="card.source" :isClicked="false" 
+        :isFaceUp="false" :name="card.name"/>
+      </DragDrop>
+
 
       <Card v-for="card in shuffledCards.slice(2,3)" :ref="card.name" :col="'c2'" :number="card.number"
       :suit="card.suit" :key="card.name" :imgSrc="card.source" :isClicked="false" 
@@ -88,9 +85,11 @@
 
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
-import Card from './components/Card.vue'
-import Deck from './components/Deck.vue'
+import Card from './components/Card'
+import Deck from './components/Deck'
+import DragDrop from '../../node_modules/jqwidgets-framework/jqwidgets-vue/vue_jqxdragdrop'
 import cardData from './data/cards.js'
+
 export default {
   name: 'App',
   data() {
@@ -114,7 +113,8 @@ export default {
   },
   components: {
     Card,
-    Deck
+    Deck,
+    DragDrop
   },
   methods: {
     updateInfo(suit, number, isFaceUp, isClicked){
