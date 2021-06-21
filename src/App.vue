@@ -7,14 +7,15 @@
 
 <div class="layout">
     <div class="col">
-        <img :src="require('@/assets/' + this.currentDealt.source + '')">
+        <img :src="require('@/assets/' + this.currentDealt.source + '')"
+        @click="changeCard">
     </div>
 
 
     <div class="col">
     
         <img v-for="card in shuffledCards.slice(0,1)" class="col1"
-        :key="card.name" :id="card.name" draggable="true"
+        :key="card.name" :id="card.name" draggable="card.disabled"
         @dragstart="handleDragStart($event)"
         @dragend="handleDragEnd($event)"
         :src="require('@/assets/' + card.source + '')">
@@ -185,10 +186,15 @@ export default {
             returnX: null,
             returnY: null,
             onTarget: false,
-            currCardCol: null
+            currCardCol: null,
+            targetCol: null
         }
     },
     methods: {
+        changeCard(){
+            this.shuffledCards[51] = {color: 'red', suit: 'heart', number: 1, name:"1heart", source: 'src/assets/hearts/acehearts.png', disabled: true}
+            console.log(this.shuffledCards[51]);
+        },
         handleDragStart(event, id){
             var elem = document.getElementById(id);
             // elem.style.boxShadow = "0px 0px 10px blue";
@@ -214,7 +220,38 @@ export default {
             if (this.cardMatch(data) && this.colMatch(targetCol)){
                 event.preventDefault();
                 event.target.appendChild(document.getElementById(data));
+                // this.moveCard(event, data);
+                this.moveTarget(event, data);
             }
+        },
+        moveCard(event, card){
+            var elem = document.getElementById(card);
+            var top = elem.getBoundingClientRect().top;
+            var left = elem.getBoundingClientRect().left;
+            elem.style.transitionDuration = '0.5s';
+            elem.style.transform = `translate(${left}px, ${top}px)`;
+        },
+        moveTarget(event, card){
+            console.log(event.target);
+            console.log(event);
+            var old = event.target.removeChild(document.getElementById(card));
+            var colCards = document.getElementsByClassName("col" + this.targetCol);
+            var colCard = colCards[colCards.length - 1];
+            console.log(colCard);
+            
+            document.getElementById(colCard.id).insertAdjacentElement('afterend', old);
+
+            var elem = document.getElementById(event.target.id);
+            var top = elem.getBoundingClientRect().top;
+            var left = elem.getBoundingClientRect().left;
+            console.log('(Left, top): ', left, top);
+
+            // console.log(elem);
+
+            elem.style.transitionDuration = '0.5s';
+            elem.style.backgroundColor = 'yellow';
+            // elem.style.transform = 'translate(0px, 67px)';
+            
         },
         cardMatch(data){
             console.log(data);
@@ -226,6 +263,7 @@ export default {
             if (this.currCardCol == null || this.currCardCol == targetCol){
                 return false;
             }
+            this.targetCol = targetCol;
             return true;
         },
 
