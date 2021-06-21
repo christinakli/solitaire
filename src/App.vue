@@ -23,12 +23,12 @@
     </div>
 
     <div class="col">
-        <div v-for="card in shuffledCards.slice(1,3)"
-        :key="card.name" :id="card.name"
-        @dragstart="handleDragStart($event, card.name)"
-        @dragend="handleDragEnd($event, card.name)">
-            <img :src="require('@/assets/' + card.source + '')">
-        </div>
+        <img v-for="card in shuffledCards.slice(1,3)"
+        :key="card.name" :id="card.name" draggable="true"
+        @dragstart="handleDragStart($event)"
+        @dragend="handleDragEnd($event)"
+        :src="require('@/assets/' + card.source + '')">
+
 
         <div class="target"
         @drop="dropHandler($event)"
@@ -38,12 +38,12 @@
     </div>
 
     <div class="col">
-        <div v-for="card in shuffledCards.slice(3,6)"
+        <img v-for="card in shuffledCards.slice(3,6)"
         :key="card.name" :id="card.name"
         @dragstart="handleDragStart($event, card.name)"
-        @dragend="handleDragEnd($event, card.name)">
-            <img :src="require('@/assets/' + card.source + '')">
-        </div>
+        @dragend="handleDragEnd($event, card.name)"
+        :src="require('@/assets/' + card.source + '')">
+
 
         <div class="target"
         @drop="dropHandler($event)"
@@ -53,12 +53,12 @@
     </div>
 
     <div class="col">
-        <div v-for="card in shuffledCards.slice(6,10)"
+        <img v-for="card in shuffledCards.slice(6,10)"
         :key="card.name" :id="card.name"
         @dragstart="handleDragStart($event, card.name)"
-        @dragend="handleDragEnd($event, card.name)">
-            <img :src="require('@/assets/' + card.source + '')">
-        </div>
+        @dragend="handleDragEnd($event, card.name)"
+        :src="require('@/assets/' + card.source + '')">
+
 
         <div class="target"
         @drop="dropHandler($event)"
@@ -68,12 +68,12 @@
     </div>
 
     <div class="col">
-        <div v-for="card in shuffledCards.slice(10,15)"
+        <img v-for="card in shuffledCards.slice(10,15)"
         :key="card.name" :id="card.name"
         @dragstart="handleDragStart($event, card.name)"
-        @dragend="handleDragEnd($event, card.name)">
-            <img :src="require('@/assets/' + card.source + '')">
-        </div>
+        @dragend="handleDragEnd($event, card.name)"
+        :src="require('@/assets/' + card.source + '')">
+
 
         <div class="target"
         @drop="dropHandler($event)"
@@ -83,12 +83,12 @@
     </div>
 
     <div class="col">
-        <div v-for="card in shuffledCards.slice(15,21)"
+        <img v-for="card in shuffledCards.slice(15,21)"
         :key="card.name" :id="card.name"
         @dragstart="handleDragStart($event, card.name)"
-        @dragend="handleDragEnd($event, card.name)">
-            <img :src="require('@/assets/' + card.source + '')">
-        </div>
+        @dragend="handleDragEnd($event, card.name)"
+        :src="require('@/assets/' + card.source + '')">
+        
 
         <div class="target"
         @drop="dropHandler($event)"
@@ -98,12 +98,12 @@
     </div>
 
     <div class="col">
-        <div v-for="card in shuffledCards.slice(21,28)"
+        <img v-for="card in shuffledCards.slice(21,28)"
         :key="card.name" :id="card.name"
         @dragstart="handleDragStart($event, card.name)"
-        @dragend="handleDragEnd($event, card.name)">
-            <img :src="require('@/assets/' + card.source + '')">
-        </div>
+        @dragend="handleDragEnd($event, card.name)"
+        :src="require('@/assets/' + card.source + '')">
+        
 
         <div class="target"
         @drop="dropHandler($event)"
@@ -121,19 +121,6 @@
 
 </div>
 
-   <div class="targets">
-       <div class="target">
-            Target
-        </div>
-
-        <div class="target">
-            Target
-        </div>
-
-        <div class="target">
-            Target
-        </div>
-    </div>
 
 
 </div>
