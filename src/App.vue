@@ -2,98 +2,114 @@
 <template>
 <div>
 
+
 <h1 :style="{textAlign: 'center'}"> solitaire </h1>
 
 <div class="layout">
-    <div class="col toDeal">
+    <div class="col">
+    
+        <img v-for="card in shuffledCards.slice(0,1)" class="drag"
+        :key="card.name" :id="card.name" draggable="true"
+        @dragstart="handleDragStart($event)"
+        @dragend="handleDragEnd($event)"
+        :src="require('@/assets/' + card.source + '')">
         
-    </div>
 
-
-    <div class="col">
-    <DragDrop v-for="card in shuffledCards.slice(0,1)"  :key="card.name"
-    :ref="card.name" 
-      :dropTarget="{one: '.target'}" 
-      @dropTargetEnter="changeIfTarget(true, card.name)" @dropTargetLeave="changeIfTarget(false, card.name)" 
-      @dragEnd="onDragEnd($event, card.name)"
-      @dragStart="onDragStart($event, card.name)">
-        <img class="drag" :id="card.name" 
-        @click="updateClicked(card.name)"
-        :src="require('@/assets/' + card.source + '')">
-    </DragDrop>
+        <div class="target"
+        @drop="dropHandler($event)"
+        @dragover="handleDragOver($event)">
+            [target]
+        </div>
     </div>
 
     <div class="col">
-    <DragDrop v-for="card in shuffledCards.slice(1,3)"  :key="card.name"
-      :dropTarget="'.target'" 
-      @dropTargetEnter="changeIfTarget(true, card.name, card.name)" 
-      @dragEnd="onDragEnd($event, card.name)"
-      @dragStart="onDragStart($event, card.name)">
-        <img class="drag" :id="card.name" 
-        @click="updateClicked(card.name)"
-        :src="require('@/assets/' + card.source + '')">
-    </DragDrop>
+        <div v-for="card in shuffledCards.slice(1,3)"
+        :key="card.name" :id="card.name"
+        @dragstart="handleDragStart($event, card.name)"
+        @dragend="handleDragEnd($event, card.name)">
+            <img :src="require('@/assets/' + card.source + '')">
+        </div>
+
+        <div class="target"
+        @drop="dropHandler($event)"
+        @dragover="handleDragOver($event)">
+            [target]
+        </div>
     </div>
 
     <div class="col">
-    <DragDrop v-for="card in shuffledCards.slice(3,6)"  :key="card.name"
-      :dropTarget="'.target'" 
-      @dropTargetEnter="changeIfTarget(true, card.name)" @dropTargetLeave="changeIfTarget(false, card.name)" 
-      @dragEnd="onDragEnd($event, card.name)"
-      @dragStart="onDragStart($event, card.name)">
-        <img class="drag" :id="card.name" 
-        @click="updateClicked(card.name)"
-        :src="require('@/assets/' + card.source + '')">
-    </DragDrop>
+        <div v-for="card in shuffledCards.slice(3,6)"
+        :key="card.name" :id="card.name"
+        @dragstart="handleDragStart($event, card.name)"
+        @dragend="handleDragEnd($event, card.name)">
+            <img :src="require('@/assets/' + card.source + '')">
+        </div>
+
+        <div class="target"
+        @drop="dropHandler($event)"
+        @dragover="handleDragOver($event)">
+            [target]
+        </div>
     </div>
 
     <div class="col">
-    <DragDrop v-for="card in shuffledCards.slice(6,10)"  :key="card.name"
-      :dropTarget="'.target'" 
-      @dropTargetEnter="changeIfTarget(true, card.name)" @dropTargetLeave="changeIfTarget(false, card.name)" 
-      @dragEnd="onDragEnd($event, card.name)"
-      @dragStart="onDragStart($event, card.name)">
-        <img class="drag" :id="card.name" :ref="card.name"
-        @click="updateClicked(card.name)"
-        :src="require('@/assets/' + card.source + '')">
-    </DragDrop>
+        <div v-for="card in shuffledCards.slice(6,10)"
+        :key="card.name" :id="card.name"
+        @dragstart="handleDragStart($event, card.name)"
+        @dragend="handleDragEnd($event, card.name)">
+            <img :src="require('@/assets/' + card.source + '')">
+        </div>
+
+        <div class="target"
+        @drop="dropHandler($event)"
+        @dragover="handleDragOver($event)">
+            [target]
+        </div>
     </div>
 
     <div class="col">
-    <DragDrop v-for="card in shuffledCards.slice(10,15)"  :key="card.name"
-      :dropTarget="'.target'" 
-      @dropTargetEnter="changeIfTarget(true, card.name)" @dropTargetLeave="changeIfTarget(false, card.name)" 
-      @dragEnd="onDragEnd($event, card.name)"
-      @dragStart="onDragStart($event, card.name)">
-        <img class="drag" :id="card.name" :ref="card.name"
-        @click="updateClicked(card.name)"
-        :src="require('@/assets/' + card.source + '')">
-    </DragDrop>
+        <div v-for="card in shuffledCards.slice(10,15)"
+        :key="card.name" :id="card.name"
+        @dragstart="handleDragStart($event, card.name)"
+        @dragend="handleDragEnd($event, card.name)">
+            <img :src="require('@/assets/' + card.source + '')">
+        </div>
+
+        <div class="target"
+        @drop="dropHandler($event)"
+        @dragover="handleDragOver($event)">
+            [target]
+        </div>
     </div>
 
     <div class="col">
-    <DragDrop v-for="card in shuffledCards.slice(15,21)"  :key="card.name"
-      :dropTarget="'.target'" 
-      @dropTargetEnter="changeIfTarget(true, card.name)" @dropTargetLeave="changeIfTarget(false, card.name)" 
-      @dragEnd="onDragEnd($event, card.name)"
-      @dragStart="onDragStart($event, card.name)">
-        <img class="drag" :id="card.name" :ref="card.name"
-        @click="updateClicked(card.name)"
-        :src="require('@/assets/' + card.source + '')">
-    </DragDrop>
+        <div v-for="card in shuffledCards.slice(15,21)"
+        :key="card.name" :id="card.name"
+        @dragstart="handleDragStart($event, card.name)"
+        @dragend="handleDragEnd($event, card.name)">
+            <img :src="require('@/assets/' + card.source + '')">
+        </div>
+
+        <div class="target"
+        @drop="dropHandler($event)"
+        @dragover="handleDragOver($event)">
+            [target]
+        </div>
     </div>
 
     <div class="col">
-     <DragDrop v-for="card in shuffledCards.slice(21,28)" :key="card.name"
-      :dropTarget="'.target'" :ref="card.name"  
-      @dropTargetEnter="changeIfTarget(true, card.name)" @dropTargetLeave="changeIfTarget(false, card.name)" 
-      @dragEnd="onDragEnd($event, card.name)"
-      @dragStart="onDragStart($event, card.name)">
-        <img class="drag" :id="card.name"
-        @click="updateClicked(card.name)"
-        :src="require('@/assets/' + card.source + '')">
-    </DragDrop>
+        <div v-for="card in shuffledCards.slice(21,28)"
+        :key="card.name" :id="card.name"
+        @dragstart="handleDragStart($event, card.name)"
+        @dragend="handleDragEnd($event, card.name)">
+            <img :src="require('@/assets/' + card.source + '')">
+        </div>
 
+        <div class="target"
+        @drop="dropHandler($event)"
+        @dragover="handleDragOver($event)">
+            [target]
+        </div>
     </div>
 
    
@@ -144,6 +160,28 @@ export default {
         }
     },
     methods: {
+        handleDragStart(event, id){
+            var elem = document.getElementById(id);
+            // elem.style.boxShadow = "0px 0px 10px blue";
+            console.log(event);
+            event.dataTransfer.setData("text", event.target.id);
+            console.log('added data' + event.target.id);
+        },
+        handleDragEnd(event){
+
+        },
+        handleDragOver(event){
+            event.preventDefault();
+        },
+        dropHandler(event){
+            console.log('Dropped');
+            var data = event.dataTransfer.getData("text");
+            console.log('data is: ' + data);
+            // if (data === 'dragged'){
+                event.preventDefault();
+                event.target.appendChild(document.getElementById(data));
+            // }
+        },
         changeIfTarget(value, name){
             var elem = document.getElementById(name);
             // elem.style.transform = 'none';
@@ -258,6 +296,14 @@ export default {
           }
         console.log(array[0]);
         return array;
+    },
+    cardSources(){
+        var array = [];
+        for (let card in this.shuffledCards){
+            array.push(this.shuffledCards[card].source);
+        }
+        console.log(array);
+        return array;
     }
   }
 }
@@ -272,8 +318,8 @@ export default {
 }
 .target{
     background-color:pink;
-    width: 150px;
-    height: 150px;
+    width: 60px;
+    height: 80px;
 }
 .jqx-draggable{
 
@@ -298,6 +344,10 @@ export default {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+}
+
+.col img{
+    width: 70%;
 }
 
 
