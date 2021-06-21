@@ -7,15 +7,20 @@
 
 <div class="layout">
     <div class="col">
+        <img :src="require('@/assets/' + this.currentDealt.source + '')">
+    </div>
+
+
+    <div class="col">
     
-        <img v-for="card in shuffledCards.slice(0,1)" class="drag"
+        <img v-for="card in shuffledCards.slice(0,1)" class="col1"
         :key="card.name" :id="card.name" draggable="true"
         @dragstart="handleDragStart($event)"
         @dragend="handleDragEnd($event)"
         :src="require('@/assets/' + card.source + '')">
         
 
-        <div class="target"
+        <div class="target" id="target1"
         @drop="dropHandler($event)"
         @dragover="handleDragOver($event)">
             [target]
@@ -23,14 +28,20 @@
     </div>
 
     <div class="col">
-        <img v-for="card in shuffledCards.slice(1,3)"
-        :key="card.name" :id="card.name" draggable="true"
+        <img v-for="card in shuffledCards.slice(1,2)" class="col2"
+        :key="card.name" :id="card.name" :draggable="!card.disabled"
+        @dragstart="handleDragStart($event)"
+        @dragend="handleDragEnd($event)"
+        :src="require('@/assets/' + card.source + '')">
+
+        <img v-for="card in shuffledCards.slice(2,3)" class="col2"
+        :key="card.name" :id="card.name" :draggable="card.disabled"
         @dragstart="handleDragStart($event)"
         @dragend="handleDragEnd($event)"
         :src="require('@/assets/' + card.source + '')">
 
 
-        <div class="target"
+        <div class="target" id="target2"
         @drop="dropHandler($event)"
         @dragover="handleDragOver($event)">
             [target]
@@ -38,14 +49,20 @@
     </div>
 
     <div class="col">
-        <img v-for="card in shuffledCards.slice(3,6)"
-        :key="card.name" :id="card.name"
+        <img v-for="card in shuffledCards.slice(3,5)" class="col3"
+        :key="card.name" :id="card.name" :draggable="!card.disabled"
         @dragstart="handleDragStart($event, card.name)"
         @dragend="handleDragEnd($event, card.name)"
         :src="require('@/assets/' + card.source + '')">
 
+        <img v-for="card in shuffledCards.slice(5,6)" class="col3"
+        :key="card.name" :id="card.name" :draggable="card.disabled"
+        @dragstart="handleDragStart($event)"
+        @dragend="handleDragEnd($event)"
+        :src="require('@/assets/' + card.source + '')">
 
-        <div class="target"
+
+        <div class="target" id="target3"
         @drop="dropHandler($event)"
         @dragover="handleDragOver($event)">
             [target]
@@ -53,14 +70,20 @@
     </div>
 
     <div class="col">
-        <img v-for="card in shuffledCards.slice(6,10)"
-        :key="card.name" :id="card.name"
+        <img v-for="card in shuffledCards.slice(6,9)" class="col4"
+        :key="card.name" :id="card.name" :draggable="!card.disabled"
         @dragstart="handleDragStart($event, card.name)"
         @dragend="handleDragEnd($event, card.name)"
         :src="require('@/assets/' + card.source + '')">
 
+        <img v-for="card in shuffledCards.slice(9,10)" class="col4"
+        :key="card.name" :id="card.name" :draggable="card.disabled"
+        @dragstart="handleDragStart($event)"
+        @dragend="handleDragEnd($event)"
+        :src="require('@/assets/' + card.source + '')">
 
-        <div class="target"
+
+        <div class="target" id="target4"
         @drop="dropHandler($event)"
         @dragover="handleDragOver($event)">
             [target]
@@ -68,14 +91,20 @@
     </div>
 
     <div class="col">
-        <img v-for="card in shuffledCards.slice(10,15)"
-        :key="card.name" :id="card.name"
+        <img v-for="card in shuffledCards.slice(10,14)" class="col5"
+        :key="card.name" :id="card.name" :draggable="!card.disabled"
         @dragstart="handleDragStart($event, card.name)"
         @dragend="handleDragEnd($event, card.name)"
         :src="require('@/assets/' + card.source + '')">
 
+        <img v-for="card in shuffledCards.slice(14,15)" class="col5"
+        :key="card.name" :id="card.name" :draggable="card.disabled"
+        @dragstart="handleDragStart($event)"
+        @dragend="handleDragEnd($event)"
+        :src="require('@/assets/' + card.source + '')">
 
-        <div class="target"
+
+        <div class="target" id="target5"
         @drop="dropHandler($event)"
         @dragover="handleDragOver($event)">
             [target]
@@ -83,14 +112,20 @@
     </div>
 
     <div class="col">
-        <img v-for="card in shuffledCards.slice(15,21)"
-        :key="card.name" :id="card.name"
+        <img v-for="card in shuffledCards.slice(15,20)" class="col6"
+        :key="card.name" :id="card.name" :draggable="!card.disabled"
         @dragstart="handleDragStart($event, card.name)"
         @dragend="handleDragEnd($event, card.name)"
+        :src="require('@/assets/' + card.source + '')">
+
+        <img v-for="card in shuffledCards.slice(20,21)" class="col6"
+        :key="card.name" :id="card.name" :draggable="card.disabled"
+        @dragstart="handleDragStart($event)"
+        @dragend="handleDragEnd($event)"
         :src="require('@/assets/' + card.source + '')">
         
 
-        <div class="target"
+        <div class="target" id="target6"
         @drop="dropHandler($event)"
         @dragover="handleDragOver($event)">
             [target]
@@ -98,14 +133,20 @@
     </div>
 
     <div class="col">
-        <img v-for="card in shuffledCards.slice(21,28)"
-        :key="card.name" :id="card.name"
+        <img v-for="card in shuffledCards.slice(21,27)" class="col7"
+        :key="card.name" :id="card.name" :draggable="!card.disabled"
         @dragstart="handleDragStart($event, card.name)"
         @dragend="handleDragEnd($event, card.name)"
         :src="require('@/assets/' + card.source + '')">
+
+        <img v-for="card in shuffledCards.slice(27,28)" class="col7"
+        :key="card.name" :id="card.name" :draggable="card.disabled"
+        @dragstart="handleDragStart($event)"
+        @dragend="handleDragEnd($event)"
+        :src="require('@/assets/' + card.source + '')">
         
 
-        <div class="target"
+        <div class="target" id="target7"
         @drop="dropHandler($event)"
         @dragover="handleDragOver($event)">
             [target]
@@ -144,31 +185,54 @@ export default {
             returnX: null,
             returnY: null,
             onTarget: false,
+            currCardCol: null
         }
     },
     methods: {
         handleDragStart(event, id){
             var elem = document.getElementById(id);
             // elem.style.boxShadow = "0px 0px 10px blue";
-            console.log(event);
+            console.log(event.target.className);
+
+            var cardCol = event.target.className;
+            this.currCardCol = cardCol[cardCol.length - 1];
+
+
             event.dataTransfer.setData("text", event.target.id);
-            console.log('added data' + event.target.id);
+            // console.log('added data' + event.target.id);
         },
         handleDragEnd(event){
-
         },
         handleDragOver(event){
             event.preventDefault();
         },
         dropHandler(event){
-            console.log('Dropped');
+            console.log("target id: " + event.target.id);
+            var targetCol = event.target.id;
             var data = event.dataTransfer.getData("text");
-            console.log('data is: ' + data);
-            // if (data === 'dragged'){
+            // console.log('data is: ' + data);
+            if (this.cardMatch(data) && this.colMatch(targetCol)){
                 event.preventDefault();
                 event.target.appendChild(document.getElementById(data));
-            // }
+            }
         },
+        cardMatch(data){
+            console.log(data);
+            return true;
+        },
+        colMatch(target){
+            var targetCol = target[target.length - 1];
+            console.log('target: ' + targetCol, 'card: ' + this.currCardCol);
+            if (this.currCardCol == null || this.currCardCol == targetCol){
+                return false;
+            }
+            return true;
+        },
+
+
+
+
+
         changeIfTarget(value, name){
             var elem = document.getElementById(name);
             // elem.style.transform = 'none';
@@ -281,7 +345,7 @@ export default {
     				[array[currentIndex], array[randomIndex]] = [
       				array[randomIndex], array[currentIndex]];
           }
-        console.log(array[0]);
+        // console.log(array[0]);
         return array;
     },
     cardSources(){
@@ -289,8 +353,13 @@ export default {
         for (let card in this.shuffledCards){
             array.push(this.shuffledCards[card].source);
         }
-        console.log(array);
+        // console.log(array);
         return array;
+    },
+    currentDealt(){
+        var card = this.shuffledCards.slice(28,52).pop();
+        // console.log(card);
+        return card;
     }
   }
 }
@@ -308,9 +377,7 @@ export default {
     width: 60px;
     height: 80px;
 }
-.jqx-draggable{
 
-}
 .targets .target{
     display: inline-block;
     margin-left: 10px;
