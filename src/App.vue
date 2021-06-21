@@ -5,13 +5,19 @@
 <h1 :style="{textAlign: 'center'}"> solitaire </h1>
 
 <div class="layout">
+    <div class="col toDeal">
+        
+    </div>
+
+
     <div class="col">
     <DragDrop v-for="card in shuffledCards.slice(0,1)"  :key="card.name"
-      :dropTarget="'.target'" 
-      @dropTargetEnter="changeIfTarget(true)" @dropTargetLeave="changeIfTarget(false)" 
+    :ref="card.name" 
+      :dropTarget="{one: '.target'}" 
+      @dropTargetEnter="changeIfTarget(true, card.name)" @dropTargetLeave="changeIfTarget(false, card.name)" 
       @dragEnd="onDragEnd($event, card.name)"
       @dragStart="onDragStart($event, card.name)">
-        <img class="drag" :id="card.name" :ref="card.name"
+        <img class="drag" :id="card.name" 
         @click="updateClicked(card.name)"
         :src="require('@/assets/' + card.source + '')">
     </DragDrop>
@@ -20,10 +26,10 @@
     <div class="col">
     <DragDrop v-for="card in shuffledCards.slice(1,3)"  :key="card.name"
       :dropTarget="'.target'" 
-      @dropTargetEnter="changeIfTarget(true)" @dropTargetLeave="changeIfTarget(false)" 
+      @dropTargetEnter="changeIfTarget(true, card.name, card.name)" 
       @dragEnd="onDragEnd($event, card.name)"
       @dragStart="onDragStart($event, card.name)">
-        <img class="drag" :id="card.name" :ref="card.name"
+        <img class="drag" :id="card.name" 
         @click="updateClicked(card.name)"
         :src="require('@/assets/' + card.source + '')">
     </DragDrop>
@@ -32,10 +38,10 @@
     <div class="col">
     <DragDrop v-for="card in shuffledCards.slice(3,6)"  :key="card.name"
       :dropTarget="'.target'" 
-      @dropTargetEnter="changeIfTarget(true)" @dropTargetLeave="changeIfTarget(false)" 
+      @dropTargetEnter="changeIfTarget(true, card.name)" @dropTargetLeave="changeIfTarget(false, card.name)" 
       @dragEnd="onDragEnd($event, card.name)"
       @dragStart="onDragStart($event, card.name)">
-        <img class="drag" :id="card.name" :ref="card.name"
+        <img class="drag" :id="card.name" 
         @click="updateClicked(card.name)"
         :src="require('@/assets/' + card.source + '')">
     </DragDrop>
@@ -44,7 +50,7 @@
     <div class="col">
     <DragDrop v-for="card in shuffledCards.slice(6,10)"  :key="card.name"
       :dropTarget="'.target'" 
-      @dropTargetEnter="changeIfTarget(true)" @dropTargetLeave="changeIfTarget(false)" 
+      @dropTargetEnter="changeIfTarget(true, card.name)" @dropTargetLeave="changeIfTarget(false, card.name)" 
       @dragEnd="onDragEnd($event, card.name)"
       @dragStart="onDragStart($event, card.name)">
         <img class="drag" :id="card.name" :ref="card.name"
@@ -56,7 +62,7 @@
     <div class="col">
     <DragDrop v-for="card in shuffledCards.slice(10,15)"  :key="card.name"
       :dropTarget="'.target'" 
-      @dropTargetEnter="changeIfTarget(true)" @dropTargetLeave="changeIfTarget(false)" 
+      @dropTargetEnter="changeIfTarget(true, card.name)" @dropTargetLeave="changeIfTarget(false, card.name)" 
       @dragEnd="onDragEnd($event, card.name)"
       @dragStart="onDragStart($event, card.name)">
         <img class="drag" :id="card.name" :ref="card.name"
@@ -68,7 +74,7 @@
     <div class="col">
     <DragDrop v-for="card in shuffledCards.slice(15,21)"  :key="card.name"
       :dropTarget="'.target'" 
-      @dropTargetEnter="changeIfTarget(true)" @dropTargetLeave="changeIfTarget(false)" 
+      @dropTargetEnter="changeIfTarget(true, card.name)" @dropTargetLeave="changeIfTarget(false, card.name)" 
       @dragEnd="onDragEnd($event, card.name)"
       @dragStart="onDragStart($event, card.name)">
         <img class="drag" :id="card.name" :ref="card.name"
@@ -78,15 +84,16 @@
     </div>
 
     <div class="col">
-    <DragDrop v-for="card in shuffledCards.slice(21,28)"  :key="card.name"
-      :dropTarget="'.target'" 
-      @dropTargetEnter="changeIfTarget(true)" @dropTargetLeave="changeIfTarget(false)" 
+     <DragDrop v-for="card in shuffledCards.slice(21,28)" :key="card.name"
+      :dropTarget="'.target'" :ref="card.name"  
+      @dropTargetEnter="changeIfTarget(true, card.name)" @dropTargetLeave="changeIfTarget(false, card.name)" 
       @dragEnd="onDragEnd($event, card.name)"
       @dragStart="onDragStart($event, card.name)">
-        <img class="drag" :id="card.name" :ref="card.name"
+        <img class="drag" :id="card.name"
         @click="updateClicked(card.name)"
         :src="require('@/assets/' + card.source + '')">
     </DragDrop>
+
     </div>
 
    
@@ -98,12 +105,20 @@
 
 </div>
 
-   <div class="target">
-        Target
+   <div class="targets">
+       <div class="target">
+            Target
+        </div>
+
+        <div class="target">
+            Target
+        </div>
+
+        <div class="target">
+            Target
+        </div>
     </div>
-    <div class="target2">
-        Target
-    </div>
+
 
 </div>
 </template>
@@ -125,11 +140,13 @@ export default {
             currentClicked: '',
             returnX: null,
             returnY: null,
-            onTarget: false
+            onTarget: false,
         }
     },
     methods: {
-        changeIfTarget(value){
+        changeIfTarget(value, name){
+            var elem = document.getElementById(name);
+            // elem.style.transform = 'none';
             if (value){
                 console.log('On target');
             }
@@ -138,21 +155,14 @@ export default {
             }
             this.onTarget = value;
         },
-        enterTarget(name){
-            console.log('On target');
-            this.onTarget = true;
-        },
-        leaveTarget(name){
-            console.log('Left target');
-            this.onTarget = false;
-        },
         updateClicked(name){
             console.log(name + ' clicked');
             this.currentClicked = name;
 
             console.log(this.currentClicked);
             var elem = document.getElementById(name);
-            elem.style.backgroundColor = "black";
+            console.log(elem);
+            // elem.style.backgroundColor = "black";
 
             var x = Math.round(document.getElementById(name).getBoundingClientRect().left);
             var y = Math.round(document.getElementById(name).getBoundingClientRect().top);
@@ -167,6 +177,7 @@ export default {
             this.returnY = y;
 
             console.log('Starting x & y: ', this.returnX, this.returnY);
+            //console.log('Style at drag start: ' + JSON.stringify(document.getElementById(name).style));
         },
         onDragEnd(event, name){
             // console.log(event, name);
@@ -175,32 +186,63 @@ export default {
             console.log('(Left, top): ', left, top);
 
             var elem = document.getElementById(name);
-            console.log(elem);
+            // console.log(elem);
 
             if (this.onTarget){
             // elem.style.top = `${top}px`;
             // elem.style.left = `${left}px`;
-                elem.style.transitionDuration = '0.5s';
-                elem.style.transform = 'translate(0px, 20px)';
+                // elem.style.transitionDuration = '0.5s';
+                // elem.style.transform = 'translate(0px, 0px)';
 
                 // elem.style.backgroundColor = "blue";
-                this.onTarget = false;
-                console.log(this.$refs[name].dropTarget);
+                // this.onTarget = false;
+                // console.log(this.$refs[name].dropTarget);
+                // this.clear(name);
+                // this.$refs[name][0]._props.revert = false;
+
+                // this.$refs[name][0].$set(this, this.$refs[name][0].revert, false);
+                // console.log(this.$refs[name][0]);
             }
             else {
+                console.log('Not on target, done dragging');
                 top = -top;
                 left =  -left;
                 console.log(left, top);
+
+                var id = this.$refs[name][0].id;
+                console.log(this.$refs[name][0]);
+
+                var dnd = document.getElementById(id);
+                console.log(elem);
+                // dnd.style.transitionDuration = '0.5s';
+                // dnd.style.transform = `translate(${left}px, ${top}px)`;
+
                 elem.style.transitionDuration = '0.5s';
                 elem.style.transform = `translate(${left}px, ${top}px)`;
 
-                console.log(this.$refs[name].dropTarget);
+                // var all = document.getElementsByClassName('jqx-draggable');
+                // for (var i = 0; i < all.length; i++) {
+                //    // all[i].style.color = 'red';
+                //    console.log(all[i]);
+                //    // all[i].style.transform = `translate(${left}px, ${top}px)`;
+                // }
+
+                
+
+                // console.log(this.$refs[name].dropTarget);
 
                 // this.onTarget = true;
 
-                // elem.style.backgroundColor = "pink";
+                // elem.style.cssText = `transform: translate(${left}px, ${top}px)`;
             }
-        
+            // this.clear(name);
+
+        },
+        clear(name){
+            var elem = document.getElementById(name);
+            elem.style.transform = 'none';
+            elem.style.width = '75px';
+            elem.style.height = '75px';
         }
     },
     computed: {
@@ -233,12 +275,12 @@ export default {
     width: 150px;
     height: 150px;
 }
+.jqx-draggable{
 
-.target2{
-    background-color:orange;
-    margin-top: 20px;
-    width: 150px;
-    height: 150px;
+}
+.targets .target{
+    display: inline-block;
+    margin-left: 10px;
 }
 .layout{
   /*
