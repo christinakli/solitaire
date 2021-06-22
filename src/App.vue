@@ -187,6 +187,7 @@ export default {
             returnY: null,
             onTarget: false,
             currCardCol: null,
+            prevCardCol: null,
             targetCol: null
         }
     },
@@ -202,6 +203,7 @@ export default {
 
             var cardCol = event.target.className;
             this.currCardCol = cardCol[cardCol.length - 1];
+            this.prevCardCol = cardCol;
 
 
             event.dataTransfer.setData("text", event.target.id);
@@ -222,6 +224,7 @@ export default {
                 event.target.appendChild(document.getElementById(data));
                 // this.moveCard(event, data);
                 this.moveTarget(event, data);
+                this.updateCards(event, data);
             }
         },
         moveCard(event, card){
@@ -231,26 +234,39 @@ export default {
             elem.style.transitionDuration = '0.5s';
             elem.style.transform = `translate(${left}px, ${top}px)`;
         },
-        moveTarget(event, card){
-            console.log(event.target);
-            console.log(event);
-            var old = event.target.removeChild(document.getElementById(card));
-            var colCards = document.getElementsByClassName("col" + this.targetCol);
-            var colCard = colCards[colCards.length - 1];
-            console.log(colCard);
-            
-            document.getElementById(colCard.id).insertAdjacentElement('afterend', old);
-
+        moveTarget(event, card){ // might not even need this function
             var elem = document.getElementById(event.target.id);
             var top = elem.getBoundingClientRect().top;
             var left = elem.getBoundingClientRect().left;
             console.log('(Left, top): ', left, top);
 
-            // console.log(elem);
-
             elem.style.transitionDuration = '0.5s';
             elem.style.backgroundColor = 'yellow';
             // elem.style.transform = 'translate(0px, 67px)';
+            
+        },
+        updateCards(event, card){
+            // Remove moved card from target
+            var old = event.target.removeChild(document.getElementById(card));
+            var colName = "col" + this.targetCol;
+            var colCards = document.getElementsByClassName(colName);
+            var colCard = colCards[colCards.length - 1];
+            
+            // Place old card below the front card of the col
+            document.getElementById(colCard.id).insertAdjacentElement('afterend', old);
+
+            //colCard = colCards[colCards.length - 1];
+            old.classList.add(colName);
+            console.log(this.prevCardCol);
+            old.classList.remove(this.prevCardCol);
+            console.log(old.classList);
+
+            // Change disabled-ness of new front cards
+            var prevFronts = document.getElementsByClassName(this.prevCardCol);
+            console.log(prevFronts);
+            var prevFront = prevFronts[prevFronts.length - 1];
+            console.log(prevFront);
+            prevFront.draggable = true;
             
         },
         cardMatch(data){
