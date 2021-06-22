@@ -35,7 +35,8 @@
         :key="card.name" :id="card.name" :draggable="!card.disabled"
         @dragstart="handleDragStart($event)"
         @dragend="handleDragEnd($event)"
-        :src="require('@/assets/' + card.source + '')">
+        :src="!card.disabled ? require('@/assets/' + card.source + '')
+        : require('@/assets/card.png')">
 
         <img v-for="card in shuffledCards.slice(2,3)" class="col2"
         :key="card.name" :id="card.name" :draggable="card.disabled"
@@ -56,7 +57,8 @@
         :key="card.name" :id="card.name" :draggable="!card.disabled"
         @dragstart="handleDragStart($event, card.name)"
         @dragend="handleDragEnd($event, card.name)"
-        :src="require('@/assets/' + card.source + '')">
+        :src="!card.disabled ? require('@/assets/' + card.source + '')
+        : require('@/assets/card.png')">
 
         <img v-for="card in shuffledCards.slice(5,6)" class="col3"
         :key="card.name" :id="card.name" :draggable="card.disabled"
@@ -77,7 +79,8 @@
         :key="card.name" :id="card.name" :draggable="!card.disabled"
         @dragstart="handleDragStart($event, card.name)"
         @dragend="handleDragEnd($event, card.name)"
-        :src="require('@/assets/' + card.source + '')">
+        :src="!card.disabled ? require('@/assets/' + card.source + '')
+        : require('@/assets/card.png')">
 
         <img v-for="card in shuffledCards.slice(9,10)" class="col4"
         :key="card.name" :id="card.name" :draggable="card.disabled"
@@ -98,7 +101,8 @@
         :key="card.name" :id="card.name" :draggable="!card.disabled"
         @dragstart="handleDragStart($event, card.name)"
         @dragend="handleDragEnd($event, card.name)"
-        :src="require('@/assets/' + card.source + '')">
+        :src="!card.disabled ? require('@/assets/' + card.source + '')
+        : require('@/assets/card.png')">
 
         <img v-for="card in shuffledCards.slice(14,15)" class="col5"
         :key="card.name" :id="card.name" :draggable="card.disabled"
@@ -119,7 +123,8 @@
         :key="card.name" :id="card.name" :draggable="!card.disabled"
         @dragstart="handleDragStart($event, card.name)"
         @dragend="handleDragEnd($event, card.name)"
-        :src="require('@/assets/' + card.source + '')">
+        :src="!card.disabled ? require('@/assets/' + card.source + '')
+        : require('@/assets/card.png')">
 
         <img v-for="card in shuffledCards.slice(20,21)" class="col6"
         :key="card.name" :id="card.name" :draggable="card.disabled"
@@ -140,7 +145,9 @@
         :key="card.name" :id="card.name" :draggable="!card.disabled"
         @dragstart="handleDragStart($event, card.name)"
         @dragend="handleDragEnd($event, card.name)"
-        :src="require('@/assets/' + card.source + '')">
+        @click="changeClick(card)"
+        :src="!card.disabled ? require('@/assets/' + card.source + '')
+        : require('@/assets/card.png')">
 
         <img v-for="card in shuffledCards.slice(27,28)" class="col7"
         :key="card.name" :id="card.name" :draggable="card.disabled"
@@ -196,6 +203,9 @@ export default {
         }
     },
     methods: {
+        changeClick(card){
+            card.disabled = !card.disabled;
+        },
         changeCard(){
             this.shuffledCards[51] = {color: 'red', suit: 'heart', number: 1, name:"1heart", source: 'src/assets/hearts/acehearts.png', disabled: true}
             console.log(this.shuffledCards[51]);
@@ -215,14 +225,22 @@ export default {
             // Credit: https://stackoverflow.com/questions/7107243/html5-dragging-and-dropping-multiple-elements-between-multiple-browser-windows/22020559
             var dragList = [];
             var dragImage = document.createElement('div');
-            dragImage.style.width = '10%';
-            dragImage.style.height = '5%';
+            // dragImage.style.width = '20%';
+            // dragImage.style.height = '67px';
 
             console.log(this.transferCards);
             var transferCards = this.transferCards;
             this.transferCards.forEach(function(elem, index){
                 dragList.push(transferCards[index].id);
-                dragImage.appendChild(transferCards[index].cloneNode(true));
+
+                // Credit: https://stackoverflow.com/questions/29131466/change-ghost-image-in-html5-drag-and-drop
+                var temp = transferCards[index].cloneNode(true);
+                temp.style.width = '44px';
+                temp.style.height = '67px';
+                // temp.style.position = "absolute"; 
+                temp.style.display = 'flex'; 
+                temp.style.backgroundColor = 'none';
+                dragImage.appendChild(temp);
             });
 
 
@@ -230,7 +248,7 @@ export default {
             event.dataTransfer.setData("text", dragList);
             document.body.appendChild(dragImage);
             setTimeout(function() { dragImage.parentNode.removeChild(dragImage) });
-            event.dataTransfer.setDragImage(dragImage, 50, 0);
+            event.dataTransfer.setDragImage(dragImage, 0, 10);
 
 
             // event.dataTransfer.setData("text", event.target.id);
@@ -339,11 +357,28 @@ export default {
             var prevFronts = document.getElementsByClassName(this.prevCardCol);
             console.log(prevFronts);
             var prevFront = prevFronts[prevFronts.length - 1];
-            console.log(prevFront);
+            console.log('prevFront', prevFront);
             if (prevFront != undefined){
                 prevFront.draggable = true;
+                var card = this.findCard(prevFront.id);
+                if (card != null){
+                    console.log(card);
+                    card.disabled = !card.disabled;
+                }
+                // prevFront.setAttribute("src", "../../Downloads/download.gif");
             }
             
+        },
+        findCard(id){
+            console.log(id);
+            for (let i in this.cards){
+                console.log(i, this.cards[i].name);
+                if (this.cards[i].name === id){
+                     console.log(this.cards[i].name);
+                     return this.cards[i];
+                }
+            }
+            return null;
         },
         cardMatch(data){
             // console.log('data: ' + data);
@@ -364,13 +399,13 @@ export default {
                      return false;
                 }
                 else if (targetNum[1] === 'spades' || targetNum[1] === 'clubs'){
-                    if (card[1] === 'heart' || card[1] === 'diamond'){
+                    if (card[1] === 'hearts' || card[1] === 'diamonds'){
                         console.log('Match')
                         return true;
                     }
                     return false;
                 }
-                else if (targetNum[1] === 'heart' || targetNum[1] === 'diamond'){
+                else if (targetNum[1] === 'hearts' || targetNum[1] === 'diamonds'){
                     if (card[1] === 'spades' || card[1] === 'clubs'){
                         console.log('mAtch');
                         return true;
