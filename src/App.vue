@@ -1,6 +1,6 @@
 
 <template>
-<div>
+<div class="body">
 
 
 <h1 :style="{textAlign: 'center'}"> solitaire </h1>
@@ -211,6 +211,8 @@ export default {
 
             this.updateTransferList(event, cardCol);
 
+
+            // Credit: https://stackoverflow.com/questions/7107243/html5-dragging-and-dropping-multiple-elements-between-multiple-browser-windows/22020559
             var dragList = [];
             var dragImage = document.createElement('div');
             dragImage.style.width = '10%';
@@ -278,13 +280,13 @@ export default {
                 this.targetCard = cards[cards.length - 1].id;
             }
 
-            if (this.cardMatch(data[0]) || this.colMatch(targetCol)){
+            if (this.cardMatch(data[0]) && this.colMatch(targetCol)){
                 for (let i in data){
                     event.preventDefault();
                     event.target.appendChild(document.getElementById(data[i]));
                     // this.moveCard(event, data);
                     this.moveTarget(event, data);
-                    this.updateCards(event, data);
+                    this.updateCards(event, data[i]);
                 }
             }
             this.transferCards = [];
@@ -308,49 +310,19 @@ export default {
             
         },
         updateCards(event, card){
-
             // Remove moved card from target
-            // var old = event.target.removeChild(document.getElementById(card));
-            // var colName = "col" + this.targetCol;
-            // var colCards = document.getElementsByClassName(colName);
-            // var colCard = colCards[colCards.length - 1];
-            // console.log(colCard);
-            
-            console.log('updateCards', [].slice.call(event.target.children));
-          
+            var old = event.target.removeChild(document.getElementById(card));
             var colName = "col" + this.targetCol;
             var colCards = document.getElementsByClassName(colName);
             var colCard = colCards[colCards.length - 1];
-
-            var old = [];
-            for (let i in card){
-                console.log('card[i]: ', card[i]);
-                console.log(document.getElementById(card[i].parentNode));
-                old.push(event.target.removeChild(document.getElementById(card[i])));     
-            }
-            // old.push(event.target.removeChild(document.getElementById(card[0])));
-
-            for (let i in old){
-                old[i].classList.add(colName);
-                old[i].classList.remove(this.prevCardCol);
-            }
+            console.log(colCard);
             
-
-
             // Place old card below the front card of the col
             if (colCard != undefined){
                 // colCard.draggable = false;
                 // this.targetCard = colCard.id;
-                for (let i in old){
-                    document.getElementById(colCard.id).insertAdjacentElement('afterend', old[i]);
-                    console.log('colCard: '); console.log(colCard.id);
-                }
-                // document.getElementById(colCard.id).insertAdjacentElement('afterend', old);
-                // console.log('colCard: '); console.log(colCard.id);
-                for (let i in this.transferCards){
-                    //document.getElementById(colCard.id).appendChild(
-                    //    document.getElementById(this.transferCards[i].id));
-                }
+                document.getElementById(colCard.id).insertAdjacentElement('afterend', old);
+                console.log('colCard: '); console.log(colCard.id);
             }
             else {
                 // this.targetCard = '';
@@ -358,16 +330,16 @@ export default {
             }
             
             //colCard = colCards[colCards.length - 1];
-            // old.classList.add(colName);
-            // console.log(this.prevCardCol);
-            // old.classList.remove(this.prevCardCol);
-            // console.log(old.classList);
+            old.classList.add(colName);
+            console.log(this.prevCardCol);
+            old.classList.remove(this.prevCardCol);
+            console.log(old.classList);
 
             // Change disabled-ness of new front cards
             var prevFronts = document.getElementsByClassName(this.prevCardCol);
-            // console.log(prevFronts);
+            console.log(prevFronts);
             var prevFront = prevFronts[prevFronts.length - 1];
-            // console.log(prevFront);
+            console.log(prevFront);
             if (prevFront != undefined){
                 prevFront.draggable = true;
             }
@@ -591,6 +563,9 @@ export default {
 
 .col img{
     width: 70%;
+}
+.body{
+    background-color: #facfed;
 }
 
 
