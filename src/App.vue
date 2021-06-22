@@ -182,13 +182,14 @@ export default {
     data() {
         return {
             cards: cardData,
-            currentClicked: '',
+            currentClicked: null,
             returnX: null,
             returnY: null,
             onTarget: false,
             currCardCol: null,
             prevCardCol: null,
-            targetCol: null
+            targetCol: null,
+            targetCard: null
         }
     },
     methods: {
@@ -218,7 +219,17 @@ export default {
             console.log("target id: " + event.target.id);
             var targetCol = event.target.id;
             var data = event.dataTransfer.getData("text");
-            // console.log('data is: ' + data);
+            console.log('data is: ' + data);
+
+            var col = 'col' + targetCol[targetCol.length - 1];
+            var cards = document.getElementsByClassName(col);
+            if (cards.length == 0){
+                this.targetCard = 'empty';
+            }
+            else {
+                this.targetCard = cards[cards.length - 1].id;
+            }
+
             if (this.cardMatch(data) && this.colMatch(targetCol)){
                 event.preventDefault();
                 event.target.appendChild(document.getElementById(data));
@@ -251,10 +262,19 @@ export default {
             var colName = "col" + this.targetCol;
             var colCards = document.getElementsByClassName(colName);
             var colCard = colCards[colCards.length - 1];
+            console.log(colCard);
             
             // Place old card below the front card of the col
-            document.getElementById(colCard.id).insertAdjacentElement('afterend', old);
-
+            if (colCard != undefined){
+                // colCard.draggable = false;
+                // this.targetCard = colCard.id;
+                document.getElementById(colCard.id).insertAdjacentElement('afterend', old);
+            }
+            else {
+                // this.targetCard = '';
+                document.getElementById("target" + this.targetCol).insertAdjacentElement('beforebegin', old);
+            }
+            
             //colCard = colCards[colCards.length - 1];
             old.classList.add(colName);
             console.log(this.prevCardCol);
@@ -266,12 +286,41 @@ export default {
             console.log(prevFronts);
             var prevFront = prevFronts[prevFronts.length - 1];
             console.log(prevFront);
-            prevFront.draggable = true;
+            if (prevFront != undefined){
+                prevFront.draggable = true;
+            }
             
         },
         cardMatch(data){
-            console.log(data);
-            return true;
+            console.log('data: ' + data);
+            console.log('target card: ' + this.targetCard);
+            if (this.targetCard === 'empty'){
+                return true;
+            }
+            else {
+                var targetNum = this.targetCard.split('-');
+                var card = data.split('-')
+                console.log(targetNum[0]);
+                console.log(card[0]);
+                if (Math.abs(targetNum[0] - card[0]) != 1 &&
+                 Math.abs(targetNum[0] - card[0] != 12)){
+                     return false;
+                }
+                else if (targetNum[1] === 'spades' || targetNum[1] === 'clubs'){
+                    if (card[1] === 'heart' || card[1] === 'diamond'){
+                        console.log('Match')
+                        return true;
+                    }
+                    return false;
+                }
+                else if (targetNum[1] === 'heart' || targetNum[1] === 'diamond'){
+                    if (card[1] === 'spades' || card[1] === 'clubs'){
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            return false;
         },
         colMatch(target){
             var targetCol = target[target.length - 1];
