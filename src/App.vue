@@ -14,11 +14,13 @@
 
     <div class="col">
     
+      
         <img v-for="card in shuffledCards.slice(0,1)" class="col1"
         :key="card.name" :id="card.name" draggable="card.disabled"
         @dragstart="handleDragStart($event)"
         @dragend="handleDragEnd($event)"
         :src="require('@/assets/' + card.source + '')">
+        
         
 
         <div class="target" id="target1"
@@ -189,7 +191,8 @@ export default {
             currCardCol: null,
             prevCardCol: null,
             targetCol: null,
-            targetCard: null
+            targetCard: null,
+            transferCards: []
         }
     },
     methods: {
@@ -200,7 +203,7 @@ export default {
         handleDragStart(event, id){
             var elem = document.getElementById(id);
             // elem.style.boxShadow = "0px 0px 10px blue";
-            console.log(event.target.className);
+            // console.log(event.target.className);
 
             var cardCol = event.target.className;
             this.currCardCol = cardCol[cardCol.length - 1];
@@ -208,7 +211,30 @@ export default {
 
 
             event.dataTransfer.setData("text", event.target.id);
+            
             // console.log('added data' + event.target.id);
+            // console.log('target col: ' + this.currCardCol);
+
+            this.updateTransferList(event, cardCol);
+        },
+        updateTransferList(event, col){
+            console.log(event);
+            var cardList = [].slice.call(document.getElementsByClassName(col));
+            // console.log(cardList);
+            var index = -1;
+            for (let i in cardList){
+                // console.log(cardList[i].id);
+                if (cardList[i].id === event.target.id){
+                    index = i;
+                    // console.log(index);
+                }
+            }
+            var transferCards = cardList.slice(index, cardList.length);
+            // console.log('to be transferred: ');
+            for (let card in transferCards){
+                // console.log(transferCards[card]);
+                this.transferCards.push(transferCards[card]);
+            }
         },
         handleDragEnd(event){
         },
@@ -269,6 +295,11 @@ export default {
                 // colCard.draggable = false;
                 // this.targetCard = colCard.id;
                 document.getElementById(colCard.id).insertAdjacentElement('afterend', old);
+                console.log('colCard: '); console.log(colCard.id);
+                for (let i in this.transferCards){
+                    //document.getElementById(colCard.id).appendChild(
+                    //    document.getElementById(this.transferCards[i].id));
+                }
             }
             else {
                 // this.targetCard = '';
@@ -295,15 +326,17 @@ export default {
             console.log('data: ' + data);
             console.log('target card: ' + this.targetCard);
             if (this.targetCard === 'empty'){
-                return true;
+                if (data.split('-')[0] == 13){
+                    return true;
+                }
+                return false;
             }
             else {
                 var targetNum = this.targetCard.split('-');
                 var card = data.split('-')
                 console.log(targetNum[0]);
                 console.log(card[0]);
-                if (Math.abs(targetNum[0] - card[0]) != 1 &&
-                 Math.abs(targetNum[0] - card[0] != 12)){
+                if (targetNum[0] - card[0] != 1){
                      return false;
                 }
                 else if (targetNum[1] === 'spades' || targetNum[1] === 'clubs'){
@@ -468,7 +501,7 @@ export default {
 }
 </script>
 
-<style src='./assets/styles/jqwidgets/jqx.base.css'></style>
+
 <style scoped>
 .drag{
     background-color: yellow;

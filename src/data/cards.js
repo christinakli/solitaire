@@ -42,8 +42,8 @@ const cards = [
     {color: 'black', suit: 'clubs', number: 9, name: "9-clubs", source: 'clubs/9clubs.png', disabled: true},
     {color: 'black', suit: 'clubs', number: 10, name: "10-clubs", source: 'clubs/10clubs.png', disabled: true},
     {color: 'black', suit: 'clubs', number: 11, name: "11-clubs", source: 'clubs/jclubs.png', disabled: true},
-    {color: 'black', suit: 'clubs', number: 12, name: "12-clubs", source: 'clubs/kclubs.png', disabled: true},
-    {color: 'black', suit: 'clubs', number: 13, name: "13-clubs", source: 'clubs/qclubs.png', disabled: true},
+    {color: 'black', suit: 'clubs', number: 12, name: "12-clubs", source: 'clubs/qclubs.png', disabled: true},
+    {color: 'black', suit: 'clubs', number: 13, name: "13-clubs", source: 'clubs/kclubs.png', disabled: true},
     
     // Black spades
     {color: 'black', suit: 'spades', number: 1, name: "1-spades", source: 'spades/acespades.png', disabled: true},
