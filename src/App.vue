@@ -209,18 +209,38 @@ export default {
             this.currCardCol = cardCol[cardCol.length - 1];
             this.prevCardCol = cardCol;
 
+            this.updateTransferList(event, cardCol);
 
-            event.dataTransfer.setData("text", event.target.id);
+            var dragList = [];
+            var dragImage = document.createElement('div');
+            dragImage.style.width = '10%';
+            dragImage.style.height = '5%';
+
+            console.log(this.transferCards);
+            var transferCards = this.transferCards;
+            this.transferCards.forEach(function(elem, index){
+                dragList.push(transferCards[index].id);
+                dragImage.appendChild(transferCards[index].cloneNode(true));
+            });
+
+
+            console.log("Dragging ", dragList);
+            event.dataTransfer.setData("text", dragList);
+            document.body.appendChild(dragImage);
+            setTimeout(function() { dragImage.parentNode.removeChild(dragImage) });
+            event.dataTransfer.setDragImage(dragImage, 50, 0);
+
+
+            // event.dataTransfer.setData("text", event.target.id);
             
             // console.log('added data' + event.target.id);
             // console.log('target col: ' + this.currCardCol);
 
-            this.updateTransferList(event, cardCol);
         },
         updateTransferList(event, col){
             console.log(event);
             var cardList = [].slice.call(document.getElementsByClassName(col));
-            // console.log(cardList);
+            console.log(cardList);
             var index = -1;
             for (let i in cardList){
                 // console.log(cardList[i].id);
@@ -230,11 +250,13 @@ export default {
                 }
             }
             var transferCards = cardList.slice(index, cardList.length);
-            // console.log('to be transferred: ');
+            this.transferCards = [];
+            console.log('to be transferred: ');
             for (let card in transferCards){
-                // console.log(transferCards[card]);
+                console.log(transferCards[card]);
                 this.transferCards.push(transferCards[card]);
             }
+            console.log('transferCards: ', this.transferCards);
         },
         handleDragEnd(event){
         },
@@ -244,8 +266,8 @@ export default {
         dropHandler(event){
             console.log("target id: " + event.target.id);
             var targetCol = event.target.id;
-            var data = event.dataTransfer.getData("text");
-            console.log('data is: ' + data);
+            var data = (event.dataTransfer.getData("text")).split(',');
+            console.log('data is: ', data);
 
             var col = 'col' + targetCol[targetCol.length - 1];
             var cards = document.getElementsByClassName(col);
@@ -256,13 +278,16 @@ export default {
                 this.targetCard = cards[cards.length - 1].id;
             }
 
-            if (this.cardMatch(data) && this.colMatch(targetCol)){
-                event.preventDefault();
-                event.target.appendChild(document.getElementById(data));
-                // this.moveCard(event, data);
-                this.moveTarget(event, data);
-                this.updateCards(event, data);
+            if (this.cardMatch(data[0]) || this.colMatch(targetCol)){
+                for (let i in data){
+                    event.preventDefault();
+                    event.target.appendChild(document.getElementById(data[i]));
+                    // this.moveCard(event, data);
+                    this.moveTarget(event, data);
+                    this.updateCards(event, data);
+                }
             }
+            this.transferCards = [];
         },
         moveCard(event, card){
             var elem = document.getElementById(card);
@@ -275,7 +300,7 @@ export default {
             var elem = document.getElementById(event.target.id);
             var top = elem.getBoundingClientRect().top;
             var left = elem.getBoundingClientRect().left;
-            console.log('(Left, top): ', left, top);
+            // console.log('(Left, top): ', left, top);
 
             elem.style.transitionDuration = '0.5s';
             elem.style.backgroundColor = 'yellow';
@@ -283,19 +308,45 @@ export default {
             
         },
         updateCards(event, card){
+
             // Remove moved card from target
-            var old = event.target.removeChild(document.getElementById(card));
+            // var old = event.target.removeChild(document.getElementById(card));
+            // var colName = "col" + this.targetCol;
+            // var colCards = document.getElementsByClassName(colName);
+            // var colCard = colCards[colCards.length - 1];
+            // console.log(colCard);
+            
+            console.log('updateCards', [].slice.call(event.target.children));
+          
             var colName = "col" + this.targetCol;
             var colCards = document.getElementsByClassName(colName);
             var colCard = colCards[colCards.length - 1];
-            console.log(colCard);
+
+            var old = [];
+            for (let i in card){
+                console.log('card[i]: ', card[i]);
+                console.log(document.getElementById(card[i].parentNode));
+                old.push(event.target.removeChild(document.getElementById(card[i])));     
+            }
+            // old.push(event.target.removeChild(document.getElementById(card[0])));
+
+            for (let i in old){
+                old[i].classList.add(colName);
+                old[i].classList.remove(this.prevCardCol);
+            }
             
+
+
             // Place old card below the front card of the col
             if (colCard != undefined){
                 // colCard.draggable = false;
                 // this.targetCard = colCard.id;
-                document.getElementById(colCard.id).insertAdjacentElement('afterend', old);
-                console.log('colCard: '); console.log(colCard.id);
+                for (let i in old){
+                    document.getElementById(colCard.id).insertAdjacentElement('afterend', old[i]);
+                    console.log('colCard: '); console.log(colCard.id);
+                }
+                // document.getElementById(colCard.id).insertAdjacentElement('afterend', old);
+                // console.log('colCard: '); console.log(colCard.id);
                 for (let i in this.transferCards){
                     //document.getElementById(colCard.id).appendChild(
                     //    document.getElementById(this.transferCards[i].id));
@@ -307,26 +358,27 @@ export default {
             }
             
             //colCard = colCards[colCards.length - 1];
-            old.classList.add(colName);
-            console.log(this.prevCardCol);
-            old.classList.remove(this.prevCardCol);
-            console.log(old.classList);
+            // old.classList.add(colName);
+            // console.log(this.prevCardCol);
+            // old.classList.remove(this.prevCardCol);
+            // console.log(old.classList);
 
             // Change disabled-ness of new front cards
             var prevFronts = document.getElementsByClassName(this.prevCardCol);
-            console.log(prevFronts);
+            // console.log(prevFronts);
             var prevFront = prevFronts[prevFronts.length - 1];
-            console.log(prevFront);
+            // console.log(prevFront);
             if (prevFront != undefined){
                 prevFront.draggable = true;
             }
             
         },
         cardMatch(data){
-            console.log('data: ' + data);
-            console.log('target card: ' + this.targetCard);
+            // console.log('data: ' + data);
+            // console.log('target card: ' + this.targetCard);
             if (this.targetCard === 'empty'){
                 if (data.split('-')[0] == 13){
+                    console.log('mAtch');
                     return true;
                 }
                 return false;
@@ -348,6 +400,7 @@ export default {
                 }
                 else if (targetNum[1] === 'heart' || targetNum[1] === 'diamond'){
                     if (card[1] === 'spades' || card[1] === 'clubs'){
+                        console.log('mAtch');
                         return true;
                     }
                     return false;
