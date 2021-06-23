@@ -6,9 +6,16 @@
 <h1 :style="{textAlign: 'center'}"> solitaire </h1>
 
 <div class="layout">
-    <div class="col">
-        <img :src="require('@/assets/' + this.currentDealt.source + '')"
-        @click="changeCard">
+    <div class="dealt col">
+        <img v-for="(card, index) in shuffledCards.slice(28,52)"
+        :key="card.name" :id="card.name" class="col0"
+        :style="{position: 'absolute', zIndex: `${52 - index}`}"
+        :src="require('@/assets/' + card.source + '')"
+        @click="changeCard(card.name)" draggable="card.disabled"
+        @dragstart="handleDragStart($event)"
+        @dragend="handleDragEnd($event)">
+
+    
     </div>
 
 
@@ -199,23 +206,49 @@ export default {
             prevCardCol: null,
             targetCol: null,
             targetCard: null,
-            transferCards: []
+            transferCards: [],
+            remaining: 24
         }
     },
     methods: {
         changeClick(card){
             card.disabled = !card.disabled;
         },
-        changeCard(){
-            this.shuffledCards[51] = {color: 'red', suit: 'heart', number: 1, name:"1heart", source: 'src/assets/hearts/acehearts.png', disabled: true}
-            console.log(this.shuffledCards[51]);
+        changeCard(id){
+            // this.shuffledCards[51] = {color: 'red', suit: 'heart', number: 1, name:"1heart", source: 'src/assets/hearts/acehearts.png', disabled: true}
+            // var newCard = this.shuffledCards[52 - this.remaining];
+            // console.log(newCard);
+            // this.remaining--;
+            if (this.remaining <= 0){
+                alert('Game over. No more cards remaining');
+            }
+            var card = document.getElementById(id);
+            card.style.transitionDuration = '1s';
+            card.style.transform = 'translate(0px, 150%)'
+            setTimeout(function(){
+                card.style.zIndex = 52 - card.style.zIndex;
+            }, 1200);
+            
+
+            // card.setAttribute('src', '@/assets/' + newCard.source + '');
+            // this.currentDealt = newCard;
         },
         handleDragStart(event, id){
             var elem = document.getElementById(id);
             // elem.style.boxShadow = "0px 0px 10px blue";
             // console.log(event.target.className);
 
+
             var cardCol = event.target.className;
+            console.log('cardcoll: ', cardCol, id, event);
+            if (cardCol === 'col0'){
+                var arr = [];
+                arr.push(event.target.id);
+                event.dataTransfer.setData("text", arr);
+                console.log('Dragging', arr);
+                this.currCardCol = '0';
+                return;
+            }
             this.currCardCol = cardCol[cardCol.length - 1];
             this.prevCardCol = cardCol;
 
@@ -300,6 +333,7 @@ export default {
 
             if (this.cardMatch(data[0]) && this.colMatch(targetCol)){
                 for (let i in data){
+                    console.log('data[i]', data[i]);
                     event.preventDefault();
                     event.target.appendChild(document.getElementById(data[i]));
                     // this.moveCard(event, data);
@@ -329,6 +363,7 @@ export default {
         },
         updateCards(event, card){
             // Remove moved card from target
+            console.log('Card: ', card);
             var old = event.target.removeChild(document.getElementById(card));
             var colName = "col" + this.targetCol;
             var colCards = document.getElementsByClassName(colName);
@@ -353,6 +388,17 @@ export default {
             old.classList.remove(this.prevCardCol);
             console.log(old.classList);
 
+            console.log(old);
+            console.log('style', old.style);
+            if (this.currCardCol === '0'){
+                console.log(old.style);
+                old.style.zIndex = 'auto';
+                old.style.width = '70%';
+                old.style.position = '';
+                old.style.transitionDuration = '';
+                old.style.transform = '';
+            }
+
             // Change disabled-ness of new front cards
             var prevFronts = document.getElementsByClassName(this.prevCardCol);
             console.log(prevFronts);
@@ -363,7 +409,7 @@ export default {
                 var card = this.findCard(prevFront.id);
                 if (card != null){
                     console.log(card);
-                    card.disabled = !card.disabled;
+                    card.disabled = false;
                 }
                 // prevFront.setAttribute("src", "../../Downloads/download.gif");
             }
@@ -424,111 +470,6 @@ export default {
             this.targetCol = targetCol;
             return true;
         },
-
-
-
-
-
-        changeIfTarget(value, name){
-            var elem = document.getElementById(name);
-            // elem.style.transform = 'none';
-            if (value){
-                console.log('On target');
-            }
-            else{
-                console.log('Left target');
-            }
-            this.onTarget = value;
-        },
-        updateClicked(name){
-            console.log(name + ' clicked');
-            this.currentClicked = name;
-
-            console.log(this.currentClicked);
-            var elem = document.getElementById(name);
-            console.log(elem);
-            // elem.style.backgroundColor = "black";
-
-            var x = Math.round(document.getElementById(name).getBoundingClientRect().left);
-            var y = Math.round(document.getElementById(name).getBoundingClientRect().top);
-            console.log('(x, y): ', x, y)
-
-        },
-        onDragStart(event, name){
-            // console.log(event);
-            var x = Math.round(document.getElementById(name).getBoundingClientRect().left);
-            this.returnX = x;
-            var y = Math.round(document.getElementById(name).getBoundingClientRect().top);
-            this.returnY = y;
-
-            console.log('Starting x & y: ', this.returnX, this.returnY);
-            //console.log('Style at drag start: ' + JSON.stringify(document.getElementById(name).style));
-        },
-        onDragEnd(event, name){
-            // console.log(event, name);
-            var top = ((event.args.position.top));
-            var left = ((event.args.position.left));
-            console.log('(Left, top): ', left, top);
-
-            var elem = document.getElementById(name);
-            // console.log(elem);
-
-            if (this.onTarget){
-            // elem.style.top = `${top}px`;
-            // elem.style.left = `${left}px`;
-                // elem.style.transitionDuration = '0.5s';
-                // elem.style.transform = 'translate(0px, 0px)';
-
-                // elem.style.backgroundColor = "blue";
-                // this.onTarget = false;
-                // console.log(this.$refs[name].dropTarget);
-                // this.clear(name);
-                // this.$refs[name][0]._props.revert = false;
-
-                // this.$refs[name][0].$set(this, this.$refs[name][0].revert, false);
-                // console.log(this.$refs[name][0]);
-            }
-            else {
-                console.log('Not on target, done dragging');
-                top = -top;
-                left =  -left;
-                console.log(left, top);
-
-                var id = this.$refs[name][0].id;
-                console.log(this.$refs[name][0]);
-
-                var dnd = document.getElementById(id);
-                console.log(elem);
-                // dnd.style.transitionDuration = '0.5s';
-                // dnd.style.transform = `translate(${left}px, ${top}px)`;
-
-                elem.style.transitionDuration = '0.5s';
-                elem.style.transform = `translate(${left}px, ${top}px)`;
-
-                // var all = document.getElementsByClassName('jqx-draggable');
-                // for (var i = 0; i < all.length; i++) {
-                //    // all[i].style.color = 'red';
-                //    console.log(all[i]);
-                //    // all[i].style.transform = `translate(${left}px, ${top}px)`;
-                // }
-
-                
-
-                // console.log(this.$refs[name].dropTarget);
-
-                // this.onTarget = true;
-
-                // elem.style.cssText = `transform: translate(${left}px, ${top}px)`;
-            }
-            // this.clear(name);
-
-        },
-        clear(name){
-            var elem = document.getElementById(name);
-            elem.style.transform = 'none';
-            elem.style.width = '75px';
-            elem.style.height = '75px';
-        }
     },
     computed: {
     shuffledCards(){
@@ -553,8 +494,14 @@ export default {
         return array;
     },
     currentDealt(){
-        var card = this.shuffledCards.slice(28,52).pop();
-        // console.log(card);
+        this.remaining--;
+        var card = this.shuffledCards[this.remaining];
+        console.log(card);
+        return card;
+    },
+    nextDealt(){
+        var card = this.shuffledCards[this.remaining];
+        console.log(card);
         return card;
     }
   }
@@ -602,6 +549,22 @@ export default {
 .body{
     background-color: #facfed;
 }
+.dealt{
+    position: relative;
+}
+
+.topDealt{
+    position:absolute;
+    z-index: 1;
+
+}
+
+.topDealt2{
+    position:absolute;
+    z-index: 2;
+
+}
+
 
 
 </style>
