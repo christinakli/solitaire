@@ -245,7 +245,8 @@ export default {
             targetCol: null,
             targetCard: null,
             transferCards: [],
-            remaining: 24
+            remaining: 24,
+            aceDeck: false
         }
     },
     methods: {
@@ -369,10 +370,18 @@ export default {
             var data = (event.dataTransfer.getData("text")).split(',');
             console.log('data is: ', data);
 
-            var targetVal = targetCol[targetCol.length - 1];
+            var targetVal;
+            if (targetCol[0] === 't'){
+                targetVal = targetCol[targetCol.length - 1];
+            }
+            else {
+                var suit = targetCol.split('-')[1];
+                targetVal = suit[0].toUpperCase();
+            }   
+            // var targetVal = targetCol[targetCol.length - 1];
             var col = 'col' + targetVal;
             var cards = document.getElementsByClassName(col);
-            console.log('Cardddddddds: ', cards, col);
+            console.log('Cardddddddds: ', cards, col, targetCol);
             // if (targetVal === 'H' || targetVal === 'C' ||
             // targetVal === 'S' || targetVal === 'D'){
             //     console.log('On a deck');
@@ -419,7 +428,7 @@ export default {
         },
         updateCards(event, card){
             // Remove moved card from target
-            console.log('Card: ', card);
+            console.log('Card: ', card, event.target.id);
             var old = event.target.removeChild(document.getElementById(card));
             var colName = "col" + this.targetCol;
             // if (this.targetCol === 'c' || this.targetCol === 's' ||
@@ -503,8 +512,28 @@ export default {
         },
         cardMatch(data){
             console.log('data: ' + data);
-            console.log('target card: ' + this.targetCard);
+            console.log('target card: ', this.targetCard);
             // var className = document.getElementById(data).classList;
+            var lastSuits;
+            if (this.targetCard !== 'empty'){
+                var lastSuits = document.getElementById(this.targetCard).classList;
+                console.log('lastSuits:', lastSuits);
+
+                if ((lastSuits.contains('colD') || lastSuits.contains('colC')
+                  || lastSuits.contains('colS') || lastSuits.contains('colH'))
+                  && !lastSuits.contains('target')){
+                    console.log('Ace deck match');
+
+                    var ret = (data.split('-')[0] - this.targetCard.split('-')[0] == 1
+                    && data.split('-')[1] == this.targetCard.split('-')[1]);
+                    this.aceDeck = ret;
+                    return ret;
+                }
+            }
+            
+            // if (lastSuit == 'D' || lastSuit == 'H' || lastSuit == 'S' || lastSuit == 'C'){
+            //     console.log('On an ace deck');
+            // }
             
             if (this.targetCard === 'empty'){
                 if (data.split('-')[0] == 13){
@@ -567,11 +596,18 @@ export default {
         },
         colMatch(target){
             var targetCol = target[target.length - 1];
-            console.log('target: ' + targetCol, 'card: ' + this.currCardCol);
+            console.log('target: ' + targetCol, 'card: ' + this.currCardCol, target);
             if (this.currCardCol == null || this.currCardCol == targetCol){
                 return false;
             }
-            this.targetCol = targetCol;
+            if (this.aceDeck){
+                var suit = target.split('-')[1][0]
+                this.targetCol = suit.toUpperCase();
+                this.aceDeck = false;
+            }
+            else {
+                this.targetCol = targetCol;
+            }
             return true;
         },
     },
