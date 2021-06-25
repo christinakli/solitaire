@@ -5,8 +5,9 @@
 
 <h1 :style="{textAlign: 'center'}"> solitaire </h1>
 
+<button @click="startOver()" :style="{float: 'right'}"> Start Over </button>
 
-
+<br>
 
 <div class="layout">
     <div class="dealt col">
@@ -183,8 +184,8 @@
         <div class="target colS" id="target-S" 
             @drop="dropHandler($event)"
             @dragover="handleDragOver($event)">
-                [target]
-                &#x2660;	
+                <p id="label-S"> [target]
+                &#x2660; </p>	
         </div>
 
             <br>
@@ -192,8 +193,8 @@
         <div class="target colH" id="target-H"
             @drop="dropHandler($event)"
             @dragover="handleDragOver($event)">
-                [target]
-                &#x2665;	
+                <p id="label-H">[target]
+                &#x2665; </p>	
         </div>
 
             <br>
@@ -201,8 +202,8 @@
         <div class="target colD" id="target-D"
             @drop="dropHandler($event)"
             @dragover="handleDragOver($event)">
-                [target]
-                &#x2666;	
+                <p id="label-D"> [target]
+                &#x2666; </p>
         </div>
 
             <br>
@@ -210,8 +211,8 @@
         <div class="target colC" id="target-C"
             @drop="dropHandler($event)"
             @dragover="handleDragOver($event)">
-                [target]
-                &#x2663;
+                <p id="label-C"> [target]
+                &#x2663; </p>
         </div>
 
         </div>
@@ -260,6 +261,9 @@ export default {
         }
     },
     methods: {
+        startOver(){
+            location.reload();
+        },
         changeClick(card){
             card.disabled = !card.disabled;
         },
@@ -298,13 +302,14 @@ export default {
             var card = document.getElementById(id);
             card.style.transitionDuration = '0s';
             card.style.transform = 'none';
+            card.style.zIndex = 'none';
 
 
             card.style.transitionDuration = '1s';
             card.style.transform = 'translate(0px, 150%)'
-            setTimeout(function(){
+            // setTimeout(function(){
                 card.style.zIndex = 52 - card.style.zIndex;
-            }, 1000);
+            // }, 1000);
             
 
             // card.setAttribute('src', '@/assets/' + newCard.source + '');
@@ -483,22 +488,26 @@ export default {
             // Place old card below the front card of the col
             if (colName === 'colS' || colName === 'colD'
             || colName === 'colC' || colName === 'colH'){
-                 document.getElementById("target-" + this.targetCol).insertAdjacentElement('beforeend', old);
+                document.getElementById("target-" + this.targetCol).insertAdjacentElement('afterbegin', old);
+                this.insertElement("target-" + this.targetCol);
+                console.log('colCard: '); console.log(colCard.id); 
             }
             else if (colCard != undefined){
                 // colCard.draggable = false;
                 // this.targetCard = colCard.id;
                 document.getElementById(colCard.id).insertAdjacentElement('afterend', old);
-                // console.log('colCard: '); console.log(colCard.id);
+                console.log('colCard: '); console.log(colCard.id);
             }
             else {
                 // this.targetCard = '';
                 // console.log('targetCol: ', this.targetCol);
                 if (this.targetCol === 'c' || this.targetCol === 's' ||
                 this.targetCol === 'd' || this.targetCol === 'h'){
+                    console.log('poop');
                     document.getElementById("target-" + this.targetCol).insertAdjacentElement('beforeend', old);
                 }
                 else {
+                    console.log('pee');
                     document.getElementById("target" + this.targetCol).insertAdjacentElement('beforebegin', old);
                 }
             }
@@ -538,6 +547,13 @@ export default {
                 }
             }
             
+        },
+        insertElement(target){
+            var list = document.getElementById(target).childNodes;
+            console.log(list);
+            var toRemove = list[list.length - 1];
+            document.getElementById(target).removeChild(toRemove);
+            console.log(toRemove.id);
         },
         findCard(id){
             // console.log(id);
@@ -683,6 +699,15 @@ export default {
         var card = this.shuffledCards[this.remaining];
         // console.log(card);
         return card;
+    },
+    gameOver(){
+        for (var i = 0; i < 8; i++){
+            var colName = 'col' + i;
+            if (document.getElementsByClassName(colName).length != 0){
+                return;
+            }
+        }
+        alert('Game over!!!!! great job');
     }
   }
 }
