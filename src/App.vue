@@ -5,6 +5,12 @@
 
 <h1 :style="{textAlign: 'center'}"> solitaire </h1>
 
+
+<button @click="refreshCards" :disabled="!reshuffle">
+            &#x1F504;
+</button>
+
+
 <div class="layout">
     <div class="dealt col">
         <img v-for="(card, index) in shuffledCards.slice(28,52)"
@@ -17,6 +23,7 @@
 
     
     </div>
+
 
 
     <div class="col">
@@ -246,32 +253,56 @@ export default {
             targetCard: null,
             transferCards: [],
             remaining: 24,
-            aceDeck: false
+            aceDeck: false,
+            reshuffle: false
         }
     },
     methods: {
         changeClick(card){
             card.disabled = !card.disabled;
         },
+        refreshCards(){
+            this.reshuffle = false;
+            var arr = document.getElementsByClassName('col0');
+            this.remaining = arr.length;
+            console.log(this.remaining);
+            for (var i = 0; i < arr.length; i++){
+                var card = arr[i];
+                console.log(card.style);
+                // card = document.getElementById(card);
+
+                card.style.zIndex = this.remaining - card.style.zIndex;
+                card.style.transitionDuration = '1s';
+                card.style.transform = 'translate(0px, -0%)';
+                // card.style.zIndex = this.remaining - card.style.zIndex;
+            }
+        }, 
         changeCard(id){
             // this.shuffledCards[51] = {color: 'red', suit: 'heart', number: 1, name:"1heart", source: 'src/assets/hearts/acehearts.png', disabled: true}
             // var newCard = this.shuffledCards[52 - this.remaining];
             // console.log(newCard);
             // this.remaining--;
-            if(document.getElementById(id).className !== 'col0'){
+            if (document.getElementById(id).className !== 'col0'){
                 return;
             }
 
-            console.log('Changing the card', document.getElementById(id).className);
+            console.log('Changing the card', document.getElementById(id).className, id);
+            this.remaining--;
+            console.log(this.remaining);
             if (this.remaining <= 0){
-                alert('Game over. No more cards remaining');
+                 //alert('Game over. No more cards remaining');
+                this.reshuffle = true;
             }
             var card = document.getElementById(id);
+            card.style.transitionDuration = '0s';
+            card.style.transform = 'none';
+
+
             card.style.transitionDuration = '1s';
             card.style.transform = 'translate(0px, 150%)'
             setTimeout(function(){
                 card.style.zIndex = 52 - card.style.zIndex;
-            }, 1200);
+            }, 1000);
             
 
             // card.setAttribute('src', '@/assets/' + newCard.source + '');
@@ -365,10 +396,17 @@ export default {
         },
         dropHandler(event){
             console.log("target id: " + event.target.id);
+            
             // console.log(event.target.id.childNodes);
             var targetCol = event.target.id;
             var data = (event.dataTransfer.getData("text")).split(',');
             console.log('data is: ', data);
+
+            if (this.prevCardCol === 'col0'){
+                // this.remaining--;
+                console.log('remaining: ' + this.remaining);
+            }
+
 
             var targetVal;
             if (targetCol[0] === 't'){
@@ -634,7 +672,7 @@ export default {
         return array;
     },
     currentDealt(){
-        this.remaining--;
+        // this.remaining--;
         var card = this.shuffledCards[this.remaining];
         console.log(card);
         return card;
@@ -702,6 +740,12 @@ export default {
 .topDealt2{
     position:absolute;
     z-index: 2;
+
+}
+
+.reset{
+    transition-duration: 1s;
+    transform: translate(0px, -0%);
 
 }
 
