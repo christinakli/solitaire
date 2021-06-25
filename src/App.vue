@@ -6,13 +6,15 @@
 <h1 :style="{textAlign: 'center'}"> solitaire </h1>
 
 
-<button @click="refreshCards" :disabled="!reshuffle">
-            &#x1F504;
-</button>
 
 
 <div class="layout">
     <div class="dealt col">
+        <button @click="refreshCards" :disabled="!reshuffle"
+        :style="{zIndex: 0, width: 44+'px', height: 64+'px'}">
+            &#x1F504;
+        </button>
+
         <img v-for="(card, index) in shuffledCards.slice(28,52)"
         :key="card.name" :id="card.name" class="col0"
         :style="{position: 'absolute', zIndex: `${52 - index}`}"
@@ -271,7 +273,7 @@ export default {
                 console.log(card.style);
                 // card = document.getElementById(card);
 
-                card.style.zIndex = this.remaining - card.style.zIndex;
+                card.style.zIndex = arr.length - i + 1;
                 card.style.transitionDuration = '1s';
                 card.style.transform = 'translate(0px, -0%)';
                 // card.style.zIndex = this.remaining - card.style.zIndex;
@@ -286,7 +288,7 @@ export default {
                 return;
             }
 
-            console.log('Changing the card', document.getElementById(id).className, id);
+            // console.log('Changing the card', document.getElementById(id).className, id);
             this.remaining--;
             console.log(this.remaining);
             if (this.remaining <= 0){
@@ -315,20 +317,20 @@ export default {
 
 
             var cardCol = event.target.className;
-            console.log('cardcoll: ', cardCol, id, event);
+            // console.log('cardcoll: ', cardCol, id, event);
             if (cardCol === 'col0'){
                 var arr = [];
                 arr.push(event.target.id);
                 event.dataTransfer.setData("text", arr);
-                console.log('Dragging', arr);
+                // console.log('Dragging', arr);
                 this.currCardCol = '0';
                 this.prevCardCol = 'col0';
                 return;
             }
             this.currCardCol = cardCol[cardCol.length - 1];
             this.prevCardCol = cardCol;
-            console.log('this.prevCardCol: ', this.prevCardCol);
-            console.log('this.currCardCol', this.currCardCol);
+            // console.log('this.prevCardCol: ', this.prevCardCol);
+            // console.log('this.currCardCol', this.currCardCol);
 
             this.updateTransferList(event, cardCol);
 
@@ -339,7 +341,7 @@ export default {
             // dragImage.style.width = '20%';
             // dragImage.style.height = '67px';
 
-            console.log(this.transferCards);
+            // console.log(this.transferCards);
             var transferCards = this.transferCards;
             this.transferCards.forEach(function(elem, index){
                 dragList.push(transferCards[index].id);
@@ -355,7 +357,7 @@ export default {
             });
 
 
-            console.log("Dragging ", dragList);
+            // console.log("Dragging ", dragList);
             event.dataTransfer.setData("text", dragList);
             document.body.appendChild(dragImage);
             setTimeout(function() { dragImage.parentNode.removeChild(dragImage) });
@@ -369,9 +371,9 @@ export default {
 
         },
         updateTransferList(event, col){
-            console.log(event);
+            // console.log(event);
             var cardList = [].slice.call(document.getElementsByClassName(col));
-            console.log(cardList);
+            // console.log(cardList);
             var index = -1;
             for (let i in cardList){
                 // console.log(cardList[i].id);
@@ -382,12 +384,12 @@ export default {
             }
             var transferCards = cardList.slice(index, cardList.length);
             this.transferCards = [];
-            console.log('to be transferred: ');
+            // console.log('to be transferred: ');
             for (let card in transferCards){
-                console.log(transferCards[card]);
+                // console.log(transferCards[card]);
                 this.transferCards.push(transferCards[card]);
             }
-            console.log('transferCards: ', this.transferCards);
+            // console.log('transferCards: ', this.transferCards);
         },
         handleDragEnd(event){
         },
@@ -395,16 +397,16 @@ export default {
             event.preventDefault();
         },
         dropHandler(event){
-            console.log("target id: " + event.target.id);
+            // console.log("target id: " + event.target.id);
             
             // console.log(event.target.id.childNodes);
             var targetCol = event.target.id;
             var data = (event.dataTransfer.getData("text")).split(',');
-            console.log('data is: ', data);
+            // console.log('data is: ', data);
 
             if (this.prevCardCol === 'col0'){
                 // this.remaining--;
-                console.log('remaining: ' + this.remaining);
+                // console.log('remaining: ' + this.remaining);
             }
 
 
@@ -419,7 +421,7 @@ export default {
             // var targetVal = targetCol[targetCol.length - 1];
             var col = 'col' + targetVal;
             var cards = document.getElementsByClassName(col);
-            console.log('Cardddddddds: ', cards, col, targetCol);
+            // console.log('Cardddddddds: ', cards, col, targetCol);
             // if (targetVal === 'H' || targetVal === 'C' ||
             // targetVal === 'S' || targetVal === 'D'){
             //     console.log('On a deck');
@@ -433,7 +435,7 @@ export default {
             // }
             // else 
             if (cards.length == 0){
-                console.log('No cards here currently', col);
+                // console.log('No cards here currently', col);
                 this.targetCard = 'empty';
             } 
             else {
@@ -443,7 +445,7 @@ export default {
 
             if (this.cardMatch(data[0]) && this.colMatch(targetCol)){
                 for (let i in data){
-                    console.log('data[i]', data[i]);
+                    // console.log('data[i]', data[i]);
                     event.preventDefault();
                     event.target.appendChild(document.getElementById(data[i]));
                     
@@ -466,17 +468,17 @@ export default {
         },
         updateCards(event, card){
             // Remove moved card from target
-            console.log('Card: ', card, event.target.id);
+            // console.log('Card: ', card, event.target.id);
             var old = event.target.removeChild(document.getElementById(card));
             var colName = "col" + this.targetCol;
             // if (this.targetCol === 'c' || this.targetCol === 's' ||
             //     this.targetCol === 'd' || this.targetCol === 'h'){
             //         colName = "col8";
             // }
-            console.log('colName: ', colName);
+            // console.log('colName: ', colName);
             var colCards = document.getElementsByClassName(colName);
             var colCard = colCards[colCards.length - 1];
-            console.log(colCard);
+            // console.log(colCard);
             
             // Place old card below the front card of the col
             if (colName === 'colS' || colName === 'colD'
@@ -487,11 +489,11 @@ export default {
                 // colCard.draggable = false;
                 // this.targetCard = colCard.id;
                 document.getElementById(colCard.id).insertAdjacentElement('afterend', old);
-                console.log('colCard: '); console.log(colCard.id);
+                // console.log('colCard: '); console.log(colCard.id);
             }
             else {
                 // this.targetCard = '';
-                console.log('targetCol: ', this.targetCol);
+                // console.log('targetCol: ', this.targetCol);
                 if (this.targetCol === 'c' || this.targetCol === 's' ||
                 this.targetCol === 'd' || this.targetCol === 'h'){
                     document.getElementById("target-" + this.targetCol).insertAdjacentElement('beforeend', old);
@@ -503,12 +505,12 @@ export default {
             
             //colCard = colCards[colCards.length - 1];
             old.classList.add(colName);
-            console.log(this.prevCardCol);
+            // console.log(this.prevCardCol);
             old.classList.remove(this.prevCardCol);
-            console.log('old class list', old.classList);
+            // console.log('old class list', old.classList);
 
-            console.log(old);
-            console.log('style', old.style);
+            // console.log(old);
+            // console.log('style', old.style);
             if (this.currCardCol === '0'){
                 // console.log(old.style);
                 old.style.zIndex = 'auto';
@@ -518,27 +520,27 @@ export default {
                 old.style.transform = '';
                 // old.setAttribute('onClick', '');
                 document.getElementById(old.id).onclick = function () {
-                    console.log('Doing nothinggg');
+                    // console.log('Doing nothinggg');
                 };
             }
 
             // Change disabled-ness of new front cards
             var prevFronts = document.getElementsByClassName(this.prevCardCol);
-            console.log(prevFronts);
+            // console.log(prevFronts);
             var prevFront = prevFronts[prevFronts.length - 1];
-            console.log('prevFront', prevFront);
+            // console.log('prevFront', prevFront);
             if (prevFront != undefined){
                 prevFront.draggable = true;
                 var card = this.findCard(prevFront.id);
                 if (card != null){
-                    console.log(card);
+                    // console.log(card);
                     card.disabled = false;
                 }
             }
             
         },
         findCard(id){
-            console.log(id);
+            // console.log(id);
             for (let i in this.cards){
                 // console.log(i, this.cards[i].name);
                 if (this.cards[i].name === id){
@@ -549,18 +551,18 @@ export default {
             return null;
         },
         cardMatch(data){
-            console.log('data: ' + data);
-            console.log('target card: ', this.targetCard);
+            // console.log('data: ' + data);
+            // console.log('target card: ', this.targetCard);
             // var className = document.getElementById(data).classList;
             var lastSuits;
             if (this.targetCard !== 'empty'){
                 var lastSuits = document.getElementById(this.targetCard).classList;
-                console.log('lastSuits:', lastSuits);
+                // console.log('lastSuits:', lastSuits);
 
                 if ((lastSuits.contains('colD') || lastSuits.contains('colC')
                   || lastSuits.contains('colS') || lastSuits.contains('colH'))
                   && !lastSuits.contains('target')){
-                    console.log('Ace deck match');
+                    // console.log('Ace deck match');
 
                     var ret = (data.split('-')[0] - this.targetCard.split('-')[0] == 1
                     && data.split('-')[1] == this.targetCard.split('-')[1]);
@@ -575,56 +577,56 @@ export default {
             
             if (this.targetCard === 'empty'){
                 if (data.split('-')[0] == 13){
-                    console.log('mAtch');
+                    // console.log('mAtch');
                     return true;
                 }
                 return false;
             }
             else if (this.targetCard.split('-')[0] === 'target'){
                 var suit = this.targetCard.split('-')[1];
-                console.log('The suit is: ', suit);
+                // console.log('The suit is: ', suit);
                 if (data.split('-')[0] == 1){
                     if (data.split('-')[1] === 'spades' && suit == 'S'){
-                        console.log('Spades match');
+                        // console.log('Spades match');
                         // document.getElementById(data).classList.add('col8');
                         return true;
                     }
                     if (data.split('-')[1] === 'hearts' && suit == 'H'){
-                        console.log('Hearts match');
+                        // console.log('Hearts match');
                         return true;
                     }
                     if (data.split('-')[1] === 'diamonds' && suit == 'D'){
-                        console.log('Diamonds match');
+                        // console.log('Diamonds match');
                         return true;
                     }
                     if (data.split('-')[1] === 'clubs' && suit == 'C'){
-                        console.log('Clubs match');
+                        // console.log('Clubs match');
                         return true;
                     }
                 }
                 return false;
             }
             else if (this.targetCard.split('-')[1] == 8){
-                console.log('Hiiiii');
+                // console.log('Hiiiii');
             }
             else {
                 var targetNum = this.targetCard.split('-');
                 var card = data.split('-')
-                console.log(targetNum[0], targetNum[1]);
-                console.log(card[0], card[1]);
+                // console.log(targetNum[0], targetNum[1]);
+                // console.log(card[0], card[1]);
                 if (targetNum[0] - card[0] != 1){
                      return false;
                 }
                 else if (targetNum[1] === 'spades' || targetNum[1] === 'clubs'){
                     if (card[1] === 'hearts' || card[1] === 'diamonds'){
-                        console.log('Match')
+                        // console.log('Match')
                         return true;
                     }
                     return false;
                 }
                 else if (targetNum[1] === 'hearts' || targetNum[1] === 'diamonds'){
                     if (card[1] === 'spades' || card[1] === 'clubs'){
-                        console.log('mAtch');
+                        // console.log('mAtch');
                         return true;
                     }
                     return false;
@@ -634,7 +636,7 @@ export default {
         },
         colMatch(target){
             var targetCol = target[target.length - 1];
-            console.log('target: ' + targetCol, 'card: ' + this.currCardCol, target);
+            // console.log('target: ' + targetCol, 'card: ' + this.currCardCol, target);
             if (this.currCardCol == null || this.currCardCol == targetCol){
                 return false;
             }
@@ -674,12 +676,12 @@ export default {
     currentDealt(){
         // this.remaining--;
         var card = this.shuffledCards[this.remaining];
-        console.log(card);
+        // console.log(card);
         return card;
     },
     nextDealt(){
         var card = this.shuffledCards[this.remaining];
-        console.log(card);
+        // console.log(card);
         return card;
     }
   }
