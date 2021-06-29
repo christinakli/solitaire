@@ -1,11 +1,14 @@
 
 <template>
+<html>
+<body>
 <div class="body">
 
 
-<h1 :style="{textAlign: 'center'}"> solitaire </h1>
+<h1> bt21 solitaire </h1>
 
-<button @click="startOver()" :style="{float: 'right'}"> Start Over </button>
+<button @click="startOver()" 
+id="startOver"> Start Over </button>
 
 <br>
 
@@ -242,10 +245,9 @@
 
 
 </div>
+</body>
+</html>
 
-
-
-</div>
 </template>
 
 <script>
@@ -742,6 +744,13 @@ export default {
 
 
 <style scoped>
+h1{
+    text-align: center;
+    font-family: jellies;
+    color: rgb(195, 139, 197);
+    font-size: 40px;
+    font-weight: normal;
+}
 .drag{
     background-color: yellow;
     width: 75px;
@@ -751,7 +760,7 @@ export default {
 .target{
     background-color: transparent;
     width: 50%;
-    height: 17%;
+    height: 14%;
     color: transparent;
     /*
     border-style: solid;
@@ -767,7 +776,12 @@ export default {
 }
 
 .targetHover{
-    background-color: yellow;
+    background-color: rgb(228, 171, 230);
+}
+
+.dealt button{
+    height: 14%;
+    box-shadow: 0px 0px 5px 5px rgb(235, 192, 236);
 }
 
 .layout{
@@ -776,6 +790,7 @@ export default {
   width: 100%;
   */
   width:100%;
+  height:70%;
   margin: none;
   display: flex;
   flex-direction: row;
@@ -797,10 +812,23 @@ img:hover{
 
 .col img{
     width: 50%;
+    height: 14%;
 }
+
+
+
 .body{
-    background-color: #facfed;
+
+    width: 90%;
+    margin-left:5%;
+    margin-right: 5%;
+    height: 65vh;
+    margin-top: 5%;
+    margin-bottom: 20%;
+    background-color: white;
+    border: 10px solid pink;
 }
+
 
 .dealt{
   position:relative;
@@ -842,8 +870,8 @@ img:hover{
 }
 
 #target-D{
-    color: red;
-    border: 2px solid red;
+    color: rgb(216, 118, 164);
+    border: 2px solid rgb(216, 118, 164);
     border-radius: 4px;
 }
 
@@ -854,8 +882,8 @@ img:hover{
 }
 
 #target-H{
-    color: red;
-    border: 2px solid red;
+    color: rgb(216, 118, 164);
+    border: 2px solid rgb(216, 118, 164);
     border-radius: 4px;
 }
 
@@ -865,4 +893,45 @@ img:hover{
     border-radius: 4px;
 }
 
+#startOver{
+    position: absolute;
+    top: 60px;
+    right: 40px;
+    width: 6%;
+    height:6%;
+    text-align: center;
+    font-size:10px;
+    font-weight: 10;
+    border-radius: 50px;
+    border: 4px solid black;
+    font-family: jellies;
+    color: rgb(195, 139, 197);
+    background-color: rgb(209, 207, 207);
+}
+
+
+@font-face{
+    font-family: billo;
+    src: url(fonts/billo.ttf);
+}
+@font-face{
+    font-family: jellies;
+    src: url(fonts/jellies.ttf);
+}
+
+</style>
+
+<style>
+body{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    min-height: 100vh;
+    object-fit: fill;
+    background-color: #facfed;
+}
+
+html{
+    min-height:100vh;
+}
 </style>
