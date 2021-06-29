@@ -10,9 +10,9 @@
 <br>
 
 <div class="layout">
-    <div class="dealt col">
+    <div class="col dealt">
         <button @click="refreshCards" :disabled="!reshuffle"
-        :style="{zIndex: 0, width: 44+'px', height: 64+'px'}">
+        :style="{zIndex: 0, width: 50+'%'}">
             &#x1F504;
         </button>
 
@@ -42,7 +42,8 @@
 
         <div class="target" id="target1"
         @drop="dropHandler($event)"
-        @dragover="handleDragOver($event)">
+        @dragover="handleDragOver($event)"
+        @dragleave="handleDragLeave($event)">
             [target]
         </div>
     </div>
@@ -64,7 +65,8 @@
 
         <div class="target" id="target2"
         @drop="dropHandler($event)"
-        @dragover="handleDragOver($event)">
+        @dragover="handleDragOver($event)"
+        @dragleave="handleDragLeave($event)">
             [target]
         </div>
     </div>
@@ -86,7 +88,8 @@
 
         <div class="target" id="target3"
         @drop="dropHandler($event)"
-        @dragover="handleDragOver($event)">
+        @dragover="handleDragOver($event)"
+        @dragleave="handleDragLeave($event)">
             [target]
         </div>
     </div>
@@ -108,7 +111,8 @@
 
         <div class="target" id="target4"
         @drop="dropHandler($event)"
-        @dragover="handleDragOver($event)">
+        @dragover="handleDragOver($event)"
+        @dragleave="handleDragLeave($event)">
             [target]
         </div>
     </div>
@@ -130,7 +134,8 @@
 
         <div class="target" id="target5"
         @drop="dropHandler($event)"
-        @dragover="handleDragOver($event)">
+        @dragover="handleDragOver($event)"
+        @dragleave="handleDragLeave($event)">
             [target]
         </div>
     </div>
@@ -152,7 +157,8 @@
 
         <div class="target" id="target6"
         @drop="dropHandler($event)"
-        @dragover="handleDragOver($event)">
+        @dragover="handleDragOver($event)"
+        @dragleave="handleDragLeave($event)">
             [target]
         </div>
     </div>
@@ -175,44 +181,54 @@
 
         <div class="target" id="target7"
         @drop="dropHandler($event)"
-        @dragover="handleDragOver($event)">
+        @dragover="handleDragOver($event)"
+        @dragleave="handleDragLeave($event)">
             [target]
         </div>
     </div>
 
-    <div class = "col">
+    <div class = "col decks">
         <div class="target colS" id="target-S" 
             @drop="dropHandler($event)"
-            @dragover="handleDragOver($event)">
-                <p id="label-S"> [target]
-                &#x2660; </p>	
+            @dragover="handleDragOver($event)"
+            @dragleave="handleDragLeave($event)">
+                &#x2660; 
+                <!-- <img id="label-S" :src="require('@/assets/' + 'spades/blankspades.jpeg')">
+                -->
         </div>
 
             <br>
 
         <div class="target colH" id="target-H"
             @drop="dropHandler($event)"
-            @dragover="handleDragOver($event)">
-                <p id="label-H">[target]
-                &#x2665; </p>	
+            @dragover="handleDragOver($event)"
+            @dragleave="handleDragLeave($event)">
+                &#x2665; 
+                <!-- <img id="label-H" :src="require('@/assets/' + 'hearts/blankhearts.jpeg')">
+                -->
         </div>
 
             <br>
 
         <div class="target colD" id="target-D"
             @drop="dropHandler($event)"
-            @dragover="handleDragOver($event)">
-                <p id="label-D"> [target]
-                &#x2666; </p>
+            @dragover="handleDragOver($event)"
+            @dragleave="handleDragLeave($event)">
+                 
+                &#x2666;  
+                <!-- <img id="label-D" :src="require('@/assets/' + 'diamonds/blankdiamonds.jpeg')">
+                -->
         </div>
 
             <br>
 
         <div class="target colC" id="target-C"
             @drop="dropHandler($event)"
-            @dragover="handleDragOver($event)">
-                <p id="label-C"> [target]
-                &#x2663; </p>
+            @dragover="handleDragOver($event)"
+            @dragleave="handleDragLeave($event)">
+                &#x2663;
+                <!-- <img id="label-C" :src="require('@/assets/' + 'clubs/blankclubs.jpeg')">
+                -->
         </div>
 
         </div>
@@ -234,6 +250,7 @@
 
 <script>
 /* eslint-disable no-console */
+/* eslint-disable */
 
 import DragDrop from '@/../node_modules/jqwidgets-scripts/jqwidgets-vue/vue_jqxdragdrop';
 import cardData from './data/cards.js'
@@ -399,9 +416,16 @@ export default {
         handleDragEnd(event){
         },
         handleDragOver(event){
+            console.log(event.target.id);
+            document.getElementById(event.target.id).classList.add('targetHover');
             event.preventDefault();
         },
+        handleDragLeave(event){
+            document.getElementById(event.target.id).classList.remove('targetHover');
+            console.log('bye');
+        },
         dropHandler(event){
+            document.getElementById(event.target.id).classList.remove('targetHover');
             // console.log("target id: " + event.target.id);
             
             // console.log(event.target.id.childNodes);
@@ -454,7 +478,7 @@ export default {
                     event.preventDefault();
                     event.target.appendChild(document.getElementById(data[i]));
                     
-                    this.moveTarget(event, data);
+                    //this.moveTarget(event, data);
                     this.updateCards(event, data[i]);
                 }
             }
@@ -491,6 +515,7 @@ export default {
                 document.getElementById("target-" + this.targetCol).insertAdjacentElement('afterbegin', old);
                 this.insertElement("target-" + this.targetCol);
                 console.log('colCard: '); console.log(colCard.id); 
+                // old.style.width = '50%';
             }
             else if (colCard != undefined){
                 // colCard.draggable = false;
@@ -498,7 +523,7 @@ export default {
                 document.getElementById(colCard.id).insertAdjacentElement('afterend', old);
                 console.log('colCard: '); console.log(colCard.id);
             }
-            else {
+            else { // This is dead code I'm pretty sure
                 // this.targetCard = '';
                 // console.log('targetCol: ', this.targetCol);
                 if (this.targetCol === 'c' || this.targetCol === 's' ||
@@ -523,7 +548,7 @@ export default {
             if (this.currCardCol === '0'){
                 // console.log(old.style);
                 old.style.zIndex = 'auto';
-                old.style.width = '70%';
+                old.style.width = '50%';
                 old.style.position = '';
                 old.style.transitionDuration = '';
                 old.style.transform = '';
@@ -554,6 +579,8 @@ export default {
             var toRemove = list[list.length - 1];
             document.getElementById(target).removeChild(toRemove);
             console.log(toRemove.id);
+            var card = list[0];
+            card.style.width = '50%';
         },
         findCard(id){
             // console.log(id);
@@ -720,26 +747,63 @@ export default {
     width: 75px;
     height: 75px;
 }
+
 .target{
-    background-color:pink;
-    width: 60px;
-    height: 80px;
+    background-color: transparent;
+    width: 50%;
+    height: 17%;
+    color: transparent;
+    /*
+    border-style: solid;
+    border-width: 1px;
+    border-color:darkgrey;
+    border-right: none;
+    */
 }
 
 .targets .target{
     display: inline-block;
     margin-left: 10px;
 }
+
+.targetHover{
+    background-color: yellow;
+}
+
 .layout{
   /*
   float: left;
   width: 100%;
   */
-  width:80%;
+  width:100%;
+  margin: none;
   display: flex;
   flex-direction: row;
 }
 .col{
+  width: 100%;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+
+/*
+img:hover{
+    box-shadow: 0px 0px 10px yellow;
+}
+*/
+
+.col img{
+    width: 50%;
+}
+.body{
+    background-color: #facfed;
+}
+
+.dealt{
+  position:relative;
   width: 100%;
   margin: 0px;
   margin-left: 15px;
@@ -747,16 +811,10 @@ export default {
   flex-direction: column;
   flex-wrap: wrap;
 }
+.dealt img{
+    width: 50%;
+}
 
-.col img{
-    width: 70%;
-}
-.body{
-    background-color: #facfed;
-}
-.dealt{
-    position: relative;
-}
 
 .topDealt{
     position:absolute;
@@ -776,6 +834,35 @@ export default {
 
 }
 
+.target img{
+    
+    width:100% !important;
+    height:100%;
+    
+}
 
+#target-D{
+    color: red;
+    border: 2px solid red;
+    border-radius: 4px;
+}
+
+#target-C{
+    color: black;
+    border: 2px solid black;
+    border-radius: 4px;
+}
+
+#target-H{
+    color: red;
+    border: 2px solid red;
+    border-radius: 4px;
+}
+
+#target-S{
+    color: black;
+    border: 2px solid black;
+    border-radius: 4px;
+}
 
 </style>
